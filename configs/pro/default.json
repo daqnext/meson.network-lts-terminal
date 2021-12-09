@@ -1,0 +1,16 @@
+{
+  "config":"dev",
+  "local_log_level":"DEBU",
+
+  "process_port":10443,
+  "access_port": 10443,
+  "cert_path": "./assets/default_app/host_chain.crt",
+  "key_path": "./assets/default_app/host_key.key",
+
+  "token":"sdfsdf",
+  "provide_folder": [
+
+  ],
+
+  "destination":"https://center.coldcdn.com"
+}

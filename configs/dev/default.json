@@ -1,0 +1,18 @@
+{
+  "config":"dev",
+  "local_log_level":"DEBU",
+
+  "process_port":10443,
+  "access_port": 10443,
+  "cert_path": "./assets/default_app/host_chain.crt",
+  "key_path": "./assets/default_app/host_key.key",
+
+  "token":"sdfsdf",
+  "provide_folder": [
+    {"abs_path":"/Users/zhangzhenbo/workspace/mesonfolder/1","size_GB":1},
+    {"abs_path":"/Users/zhangzhenbo/workspace/mesonfolder/2","size_GB":3},
+    {"abs_path":"/Users/zhangzhenbo/workspace/mesonfolder/3","size_GB":10}
+  ],
+
+  "destination":"https://center.coldcdn.com"
+}

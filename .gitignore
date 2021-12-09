@@ -13,3 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+/logs/
+/test/
+/apps/default_app/manager/sign/sign_test.go
+/build/
