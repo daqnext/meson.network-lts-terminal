@@ -1,0 +1,20 @@
+{
+  "db_host": "localhost",
+  "db_name": "xxxxx",
+  "db_password": "xxxxxx",
+  "db_port": 3306,
+  "db_username": "xxxxx",
+  "elasticsearch_addr": "xxxxx",
+  "elasticsearch_password": "xxxxx",
+  "elasticsearch_username": "xxxxx",
+  "eth_wallet_mnemonic": "xxxx",
+  "http_port": 80,
+  "http_static_rel_folder": "/assets/default_/web",
+  "infura1": "xxxx",
+  "infura2": "xxxxx",
+  "local_log_level": "INFO",
+  "redis_addr": "127.0.0.1",
+  "redis_password": "",
+  "redis_port": 6379,
+  "redis_username": ""
+}
