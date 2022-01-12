@@ -12,10 +12,15 @@ type CertMgr struct {
 var certMgr *CertMgr
 var once sync.Once
 
-func GetSingleInstance() *CertMgr {
+func Init() {
+	//only run once
 	once.Do(func() {
 		certMgr = new()
 	})
+}
+
+func GetSingleInstance() *CertMgr {
+	Init()
 	return certMgr
 }
 

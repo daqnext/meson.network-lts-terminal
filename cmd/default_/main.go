@@ -5,12 +5,22 @@ import (
 
 	"github.com/daqnext/meson.network-lts-terminal/basic"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/controllers"
+	"github.com/daqnext/meson.network-lts-terminal/components/cache"
 	"github.com/daqnext/meson.network-lts-terminal/tools"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 
 	"github.com/universe-30/USafeGo"
 )
+
+func InitComponent() {
+	cache.Init()
+	//echoServer.Init()
+	//redisClient.Init()
+	//sprMgr.Init()
+	//sqldb.Init()
+	//es.Init()
+}
 
 func startJobs() {
 	// start BGJob ////////
@@ -34,11 +44,8 @@ func startJobs() {
 func StartDefault(clictx *cli.Context) {
 	color.Green(basic.Logo)
 
-	// init resourc
-	//global.InitResources()
-	//defer func() {
-	//	global.ReleaseResources()
-	//}()
+	// init component
+	InitComponent()
 
 	//api
 	controllers.RunApi()

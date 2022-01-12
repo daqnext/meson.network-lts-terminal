@@ -21,10 +21,15 @@ type Service struct {
 var service *Service
 var once sync.Once
 
-func GetSingleInstance() *Service {
+func Init() {
+	//only run once
 	once.Do(func() {
 		service = newDaemonService()
 	})
+}
+
+func GetSingleInstance() *Service {
+	Init()
 	return service
 }
 

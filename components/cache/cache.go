@@ -9,9 +9,14 @@ import (
 var cache *UCache.Cache
 var once sync.Once
 
-func GetSingleInstance() *UCache.Cache {
+func Init() {
+	//only run once
 	once.Do(func() {
 		cache = UCache.New()
 	})
+}
+
+func GetSingleInstance() *UCache.Cache {
+	Init()
 	return cache
 }

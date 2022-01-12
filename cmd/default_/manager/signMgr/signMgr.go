@@ -21,10 +21,15 @@ type SignMgr struct {
 var signMgr *SignMgr
 var once sync.Once
 
-func GetSingleInstance() *SignMgr {
+func Init() {
+	//only run once
 	once.Do(func() {
 		signMgr = new()
 	})
+}
+
+func GetSingleInstance() *SignMgr {
+	Init()
 	return signMgr
 }
 

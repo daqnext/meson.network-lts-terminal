@@ -13,10 +13,15 @@ type VersionMgr struct {
 var versionMgr *VersionMgr
 var once sync.Once
 
-func GetSingleInstance() *VersionMgr {
+func Init() {
+	//only run once
 	once.Do(func() {
 		versionMgr = new()
 	})
+}
+
+func GetSingleInstance() *VersionMgr {
+	Init()
 	return versionMgr
 }
 

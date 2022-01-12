@@ -1,4 +1,4 @@
-package basic
+package configuartion
 
 import (
 	"github.com/spf13/cast"

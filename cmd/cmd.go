@@ -9,6 +9,8 @@ import (
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/log"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/service"
+	"github.com/daqnext/meson.network-lts-terminal/configuartion"
+	"github.com/universe-30/ULog"
 	"github.com/universe-30/UUtils/path_util"
 	"github.com/urfave/cli/v2"
 )
@@ -179,7 +181,7 @@ func ConfigCmd() *cli.App {
 }
 
 ////////end config to do app ///////////
-func readDefaultConfig(isDev bool) (*basic.VConfig, string, error) {
+func readDefaultConfig(isDev bool) (*configuartion.VConfig, string, error) {
 	var defaultConfigPath string
 	if isDev {
 		basic.Logger.Infoln("======== using dev mode ========")
@@ -191,7 +193,7 @@ func readDefaultConfig(isDev bool) (*basic.VConfig, string, error) {
 
 	basic.Logger.Infoln("config file:", defaultConfigPath)
 
-	config, err := basic.ReadConfig(defaultConfigPath)
+	config, err := configuartion.ReadConfig(defaultConfigPath)
 	if err != nil {
 		basic.Logger.Errorln("no pro.json under /configs folder , use --dev=true to run dev mode")
 		return nil, "", err
@@ -211,19 +213,21 @@ func iniConfig(isDev bool) error {
 	configs, _ := config.GetConfigAsString()
 	basic.Logger.Infoln(configs)
 	basic.Logger.Infoln("======== end  of  config ========")
-	basic.Config = config
+	configuartion.Config = config
 	return nil
 }
 
 func setLoggerLevel() error {
 	logLevel := "INFO"
-	if basic.Config != nil {
+	if configuartion.Config != nil {
 		var err error
-		logLevel, err = basic.Config.GetString("local_log_level", "INFO")
+		logLevel, err = configuartion.Config.GetString("local_log_level", "INFO")
 		if err != nil {
 			return err
 		}
 	}
-	basic.SetLogLevel(logLevel)
+
+	l := ULog.ParseLogLevel(logLevel)
+	basic.Logger.SetLevel(l)
 	return nil
 }

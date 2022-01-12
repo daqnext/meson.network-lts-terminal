@@ -16,10 +16,15 @@ type RandomKeyMgr struct {
 var randomKeyMgr *RandomKeyMgr
 var once sync.Once
 
-func GetSingleInstance() *RandomKeyMgr {
+func Init() {
+	//only run once
 	once.Do(func() {
 		randomKeyMgr = new()
 	})
+}
+
+func GetSingleInstance() *RandomKeyMgr {
+	Init()
 	return randomKeyMgr
 }
 

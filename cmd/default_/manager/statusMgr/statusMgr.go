@@ -24,10 +24,15 @@ type StatusMgr struct {
 var statusMgr *StatusMgr
 var once sync.Once
 
-func GetSingleInstance() *StatusMgr {
+func Init() {
+	//only run once
 	once.Do(func() {
 		statusMgr = new()
 	})
+}
+
+func GetSingleInstance() *StatusMgr {
+	Init()
 	return statusMgr
 }
 

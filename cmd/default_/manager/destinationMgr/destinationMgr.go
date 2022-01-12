@@ -21,10 +21,15 @@ type DestMgr struct {
 var echoServer *DestMgr
 var once sync.Once
 
-func GetSingleInstance() *DestMgr {
+func Init() {
+	//only run once
 	once.Do(func() {
 		echoServer = new()
 	})
+}
+
+func GetSingleInstance() *DestMgr {
+	Init()
 	return echoServer
 }
 

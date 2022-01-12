@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/daqnext/meson.network-lts-terminal/basic"
+	"github.com/daqnext/meson.network-lts-terminal/configuartion"
 	"github.com/urfave/cli/v2"
 )
 
@@ -12,7 +12,7 @@ var boolConfPrams = []string{}
 
 //get all config flags
 func GetFlags() (allflags []cli.Flag) {
-	allConfig := basic.Config.AllSettings()
+	allConfig := configuartion.Config.AllSettings()
 	for k, v := range allConfig {
 		switch v.(type) {
 		case string:
@@ -37,6 +37,12 @@ func GetFlags() (allflags []cli.Flag) {
 	}
 
 	//custom flag
+	//other custom flags
+	allflags = append(
+		allflags,
+		&cli.StringFlag{Name: "addpath", Required: false},
+		&cli.StringFlag{Name: "removepath", Required: false},
+	)
 
 	return
 }

@@ -10,6 +10,7 @@ import (
 
 	"github.com/daqnext/MesonTerminalEchoServer"
 	"github.com/daqnext/meson.network-lts-terminal/basic"
+	"github.com/daqnext/meson.network-lts-terminal/configuartion"
 	"github.com/daqnext/meson.network-lts-terminal/tools"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/universe-30/EchoMiddleware"
@@ -24,14 +25,19 @@ type EchoServer struct {
 var echoServer *EchoServer
 var once sync.Once
 
-func GetSingleInstance() *EchoServer {
+func Init() {
+	//only run once
 	once.Do(func() {
-		var err error
+		var err error = nil
 		echoServer, err = newEchoServer()
 		if err != nil {
 			basic.Logger.Fatalln(err)
 		}
 	})
+}
+
+func GetSingleInstance() *EchoServer {
+	Init()
 	return echoServer
 }
 
@@ -40,7 +46,7 @@ http_port
 http_static_rel_folder
 */
 func newEchoServer() (*EchoServer, error) {
-	http_port, err := basic.Config.GetInt("http_port", 8080)
+	http_port, err := configuartion.Config.GetInt("http_port", 8080)
 	if err != nil {
 		return nil, errors.New("http_port [int] in config error," + err.Error())
 	}
