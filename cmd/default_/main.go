@@ -1,74 +1,47 @@
 package default_
 
 import (
-	"context"
 	"time"
 
 	"github.com/daqnext/meson.network-lts-terminal/basic"
-	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/global"
+	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/controllers"
 	"github.com/daqnext/meson.network-lts-terminal/tools"
 	"github.com/fatih/color"
-	"github.com/labstack/echo/v4"
-	"github.com/universe-30/UJob"
 	"github.com/urfave/cli/v2"
 
-	goredis "github.com/go-redis/redis/v8"
 	"github.com/universe-30/USafeGo"
 )
 
+func startJobs() {
+	// start BGJob ////////
+
+	//heartBeat
+
+	//uploadStatus
+
+	//scanDisk
+
+	//scanExpireFiles
+
+	//checkTlsCertificate
+
+	//checkPublicKey
+
+	//updateRandomKey
+	//global.RandKeyMgr.ScheduleUpdateRandomKey()
+}
+
 func StartDefault(clictx *cli.Context) {
-
 	color.Green(basic.Logo)
-	basic.Logger.Infoln("hello world , this default app")
 
-	//example
-	global.IniResources()
-	defer func() {
-		global.ReleaseResources()
-	}()
+	// init resourc
+	//global.InitResources()
+	//defer func() {
+	//	global.ReleaseResources()
+	//}()
 
-	//cache example
-	global.Cache.Set("foo", "bar", 10)
-	v, _, exist := global.Cache.Get("foo")
-	if exist {
-		basic.Logger.Debugln(v.(string))
-	}
-
-	//redis example
-	if global.Redis != nil {
-		global.Redis.Set(context.Background(), "redis-foo", "redis-bar", 10*time.Second)
-		str, err := global.Redis.Get(context.Background(), "redis-foo").Result()
-		if err != nil && err != goredis.Nil {
-			basic.Logger.Errorln(err)
-		}
-		basic.Logger.Debugln(str)
-	}
-
-	//schedule job
-	count := 0
-	job := UJob.Start(
-		//job process
-		func() {
-			count++
-			basic.Logger.Debugln("Schedule Job running,count", count)
-		},
-		//onPanic callback
-		tools.PanicHandler,
-		2,
-		// job type
-		// UJob.TYPE_PANIC_REDO  auto restart if panic
-		// UJob.TYPE_PANIC_RETURN  stop if panic
-		UJob.TYPE_PANIC_REDO,
-		// check continue callback, the job will stop running if return false
-		// the job will keep running if this callback is nil
-		func(job *UJob.Job) bool {
-			return true
-		},
-		// onFinish callback
-		func(inst *UJob.Job) {
-			basic.Logger.Debugln("finish", "cycle", inst.Cycles)
-		},
-	)
+	//api
+	controllers.RunApi()
 
 	//safeGo
 	USafeGo.Go(
@@ -76,7 +49,6 @@ func StartDefault(clictx *cli.Context) {
 		func(args ...interface{}) {
 			basic.Logger.Debugln("example of USafeGo")
 			time.Sleep(10 * time.Second)
-			job.SetToCancel()
 		},
 		//onPanic callback
 		tools.PanicHandler)
@@ -87,10 +59,39 @@ func StartDefault(clictx *cli.Context) {
 	}
 
 	//httpServer example
-	global.HttpServer.GET("/test", func(context echo.Context) error {
-		return context.String(200, "test success")
-	})
-	global.HttpServer.UseJsoniter()
-	global.HttpServer.SetPanicHandler(tools.PanicHandler)
-	global.HttpServer.Start()
+	//global.HttpServer.GET("/test", func(context echo.Context) error {
+	//	return context.String(200, "test success")
+	//})
+
+	//test log
+	go func() {
+		count := 0
+		for {
+			count++
+			if count == 10 {
+				//global.EchoServer.Shutdown()
+				go func() {
+					//err := global.EchoServer.Restart()
+					//if err != nil {
+					//	servercli.LocalLogger.Infoln(err)
+					//}
+
+					//servercli.LocalLogger.Debugln("try to colse")
+					//global.EchoServer.Shutdown()
+					//global.ReleaseResource()
+					//os.Exit(0)
+
+					//global.EchoServer.Shutdown()
+					//time.Sleep(5 * time.Second)
+					//global.EchoServer.StartTLS([]byte(chain), []byte(key))
+				}()
+			}
+			if count >= 60 {
+
+			}
+			time.Sleep(time.Second)
+			//servercli.LocalLogger.Debugln("default app test running")
+		}
+	}()
+
 }

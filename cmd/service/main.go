@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/daqnext/meson.network-lts-terminal/basic"
-	"github.com/daqnext/meson.network-lts-terminal/components"
+	"github.com/daqnext/meson.network-lts-terminal/components/daemonService"
 	"github.com/urfave/cli/v2"
 )
 
@@ -18,7 +18,7 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
-	compDeamon := components.NewDaemonService()
+	compDeamon := daemonService.GetSingleInstance()
 
 	var status string
 	var e error

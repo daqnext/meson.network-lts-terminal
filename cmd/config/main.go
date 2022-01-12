@@ -28,6 +28,14 @@ func ConfigSetting(clictx *cli.Context) {
 		}
 	}
 
+	for _, v := range boolConfPrams {
+		if clictx.IsSet(v) {
+			newValue := clictx.Bool(v)
+			basic.Config.Set(v, newValue)
+			configModify = true
+		}
+	}
+
 	if configModify {
 		err := basic.Config.WriteConfig()
 		if err != nil {

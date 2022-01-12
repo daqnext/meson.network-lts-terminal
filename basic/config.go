@@ -1,10 +1,10 @@
 package basic
 
 import (
-	"io/ioutil"
-
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
+
+	"io/ioutil"
 )
 
 var Config *VConfig

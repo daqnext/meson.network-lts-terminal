@@ -1,7 +1,8 @@
-package components
+package daemonService
 
 import (
 	"runtime"
+	"sync"
 
 	"github.com/daqnext/daemon"
 	"github.com/daqnext/meson.network-lts-terminal/basic"
@@ -9,15 +10,25 @@ import (
 
 const (
 	// name of the service
-	name        = "template"
-	description = "app template"
+	name        = "meson"
+	description = "meson terminal"
 )
 
 type Service struct {
 	daemon.Daemon
 }
 
-func NewDaemonService() *Service {
+var service *Service
+var once sync.Once
+
+func GetSingleInstance() *Service {
+	once.Do(func() {
+		service = newDaemonService()
+	})
+	return service
+}
+
+func newDaemonService() *Service {
 	kind := daemon.SystemDaemon
 	if runtime.GOOS == "darwin" {
 		kind = daemon.UserAgent

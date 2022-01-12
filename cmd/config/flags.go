@@ -36,5 +36,7 @@ func GetFlags() (allflags []cli.Flag) {
 		allflags = append(allflags, &cli.BoolFlag{Name: name, Required: false})
 	}
 
+	//custom flag
+
 	return
 }
