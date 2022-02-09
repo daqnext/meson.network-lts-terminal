@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/daqnext/meson.network-lts-terminal/configuartion"
+	"github.com/daqnext/meson.network-lts-terminal/configuration"
 	"github.com/urfave/cli/v2"
 )
 
@@ -12,7 +12,7 @@ var boolConfPrams = []string{}
 
 //get all config flags
 func GetFlags() (allflags []cli.Flag) {
-	allConfig := configuartion.Config.AllSettings()
+	allConfig := configuration.Config.AllSettings()
 	for k, v := range allConfig {
 		switch v.(type) {
 		case string:

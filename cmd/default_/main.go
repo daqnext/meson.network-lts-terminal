@@ -1,11 +1,21 @@
 package default_
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/daqnext/meson.network-lts-terminal/basic"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/controllers"
-	"github.com/daqnext/meson.network-lts-terminal/components/cache"
+	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/stopSingle"
+	"github.com/daqnext/meson.network-lts-terminal/plugin/cache"
+	"github.com/daqnext/meson.network-lts-terminal/src/destinationMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
+	"github.com/daqnext/meson.network-lts-terminal/src/randomKeyMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/signMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/statusMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/tlsCertificateMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/versionMgr"
 	"github.com/daqnext/meson.network-lts-terminal/tools"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
@@ -13,43 +23,108 @@ import (
 	"github.com/universe-30/USafeGo"
 )
 
-func InitComponent() {
+func initComponent() {
 	cache.Init()
-	//echoServer.Init()
-	//redisClient.Init()
-	//sprMgr.Init()
-	//sqldb.Init()
-	//es.Init()
+	destinationMgr.Init()
+	randomKeyMgr.Init()
+	signMgr.Init()
+	statusMgr.Init()
+	tlsCertificateMgr.Init()
+	versionMgr.Init()
+
+	err := echoServer.Init()
+	if err != nil {
+		basic.Logger.Fatalln("echoServer init error:", err)
+	}
+
+	err = diskFileMgr.Init()
+	if err != nil {
+		basic.Logger.Fatalln("diskFileMgr init error:", err)
+	}
+
 }
 
-func startJobs() {
-	// start BGJob ////////
+//func startDiskMgr() {
+//	//disk check and sync provide folder
+//	//read provide Info from config
+//	provideFolder, err := configuartion.Config.GetProvideFolders()
+//	if err != nil {
+//		//basic.Logger.Fatalln("http server start failed")
+//		//todo handle get provideFolder err
+//	}
+//	err = diskFileMgr.GetSingleInstance().AddProvideFolder(provideFolder)
+//	if err != nil {
+//		basic.Logger.Fatalln("Provide folder err:", err)
+//	}
+//	err = diskFileMgr.GetSingleInstance().CheckFolderSpace()
+//	if err != nil {
+//		basic.Logger.Fatalln("Check folder space err:", err)
+//	}
+//
+//	missingFiles, errorFiles, err := diskFileMgr.GetSingleInstance().ScanDiskFileInDb()
+//	if err != nil {
+//		basic.Logger.Errorln(err)
+//	}
+//	if len(missingFiles) > 0 {
+//		//send to server
+//	}
+//	if len(errorFiles) > 0 {
+//		//send to server
+//	}
+//}
 
-	//heartBeat
-
-	//uploadStatus
-
-	//scanDisk
-
-	//scanExpireFiles
-
-	//checkTlsCertificate
-
-	//checkPublicKey
-
-	//updateRandomKey
-	//global.RandKeyMgr.ScheduleUpdateRandomKey()
+func startEchoServer() {
+	//api
+	controllers.DeclareApi()
+	//start echo server
+	go func() {
+		chain, key := tlsCertificateMgr.GetSingleInstance().GetTlsCert()
+		err := echoServer.GetSingleInstance().StartTLS(chain, key)
+		if err != nil {
+			if err == http.ErrServerClosed {
+				basic.Logger.Debugln(err)
+			} else {
+				basic.Logger.Errorln(err)
+			}
+		}
+	}()
+	//wait for echo server start
+	err := echoServer.GetSingleInstance().WaitForServerStart(true)
+	if err != nil {
+		basic.Logger.Fatalln("http server start failed")
+	}
+	basic.Logger.Infoln("echo server started on port:", echoServer.GetSingleInstance().Http_port)
 }
 
 func StartDefault(clictx *cli.Context) {
 	color.Green(basic.Logo)
 
 	// init component
-	InitComponent()
+	initComponent()
 
-	//api
-	controllers.RunApi()
+	//check destination
 
+	//check version
+
+	//check config
+	//input missing config
+
+	//public key for sign
+
+	//domain and tls for echo server
+
+	//diskMgr
+	//startDiskMgr()
+
+	//echo server
+	startEchoServer()
+	stopSingle.WaitingForStopSingle()
+
+	//job after echo start success
+
+	////////////
+	////test////
+	basic.Logger.Debugln("test part")
 	//safeGo
 	USafeGo.Go(
 		//process
@@ -64,11 +139,6 @@ func StartDefault(clictx *cli.Context) {
 		basic.Logger.Infoln("running")
 		time.Sleep(1 * time.Second)
 	}
-
-	//httpServer example
-	//global.HttpServer.GET("/test", func(context echo.Context) error {
-	//	return context.String(200, "test success")
-	//})
 
 	//test log
 	go func() {
@@ -100,5 +170,4 @@ func StartDefault(clictx *cli.Context) {
 			//servercli.LocalLogger.Debugln("default app test running")
 		}
 	}()
-
 }

@@ -1,7 +1,7 @@
 package scheduleJob
 
 import (
-	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/manager/randomKeyMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/randomKeyMgr"
 )
 
 func heartBeat() {

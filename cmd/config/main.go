@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/daqnext/meson.network-lts-terminal/configuartion"
+	"github.com/daqnext/meson.network-lts-terminal/configuration"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
@@ -15,7 +15,7 @@ func ConfigSetting(clictx *cli.Context) {
 	for _, v := range stringConfParams {
 		if clictx.IsSet(v) {
 			newValue := clictx.String(v)
-			configuartion.Config.Set(v, newValue)
+			configuration.Config.Set(v, newValue)
 			configModify = true
 		}
 	}
@@ -23,7 +23,7 @@ func ConfigSetting(clictx *cli.Context) {
 	for _, v := range float64ConfParams {
 		if clictx.IsSet(v) {
 			newValue := clictx.Float64(v)
-			configuartion.Config.Set(v, newValue)
+			configuration.Config.Set(v, newValue)
 			configModify = true
 		}
 	}
@@ -31,7 +31,7 @@ func ConfigSetting(clictx *cli.Context) {
 	for _, v := range boolConfPrams {
 		if clictx.IsSet(v) {
 			newValue := clictx.Bool(v)
-			configuartion.Config.Set(v, newValue)
+			configuration.Config.Set(v, newValue)
 			configModify = true
 		}
 	}
@@ -45,13 +45,13 @@ func ConfigSetting(clictx *cli.Context) {
 	}
 
 	if configModify {
-		err := configuartion.Config.WriteConfig()
+		err := configuration.Config.WriteConfig()
 		if err != nil {
 			color.Red("config save error:", err)
 			return
 		}
 		fmt.Println("config modified new config")
-		fmt.Println(configuartion.Config.GetConfigAsString())
+		fmt.Println(configuration.Config.GetConfigAsString())
 	}
 }
 
@@ -63,7 +63,7 @@ type ProvideFolder struct {
 func handleAddPath(clictx *cli.Context) (modified bool) {
 
 	provideFolders := []ProvideFolder{}
-	provide_folder := configuartion.Config.Get("provide_folder", nil)
+	provide_folder := configuration.Config.Get("provide_folder", nil)
 	iArray, ok := provide_folder.([]interface{})
 	if !ok {
 
@@ -106,7 +106,7 @@ func handleAddPath(clictx *cli.Context) (modified bool) {
 		SizeGB:  size,
 	}
 	provideFolders = append(provideFolders, pf)
-	configuartion.Config.Set("provide_folder", provideFolders)
+	configuration.Config.Set("provide_folder", provideFolders)
 	fmt.Println("new folder added:", folderPath, "size", size, "GB")
 	return true
 
@@ -115,7 +115,7 @@ func handleAddPath(clictx *cli.Context) (modified bool) {
 func handleRemovePath(clictx *cli.Context) (modified bool) {
 
 	provideFolders := []ProvideFolder{}
-	provide_folder := configuartion.Config.Get("provide_folder", nil)
+	provide_folder := configuration.Config.Get("provide_folder", nil)
 	iArray, ok := provide_folder.([]interface{})
 	if !ok {
 
@@ -138,7 +138,7 @@ func handleRemovePath(clictx *cli.Context) (modified bool) {
 	}
 
 	if removed {
-		configuartion.Config.Set("provide_folder", provideFolders)
+		configuration.Config.Set("provide_folder", provideFolders)
 		fmt.Println("path removed:", value)
 		return true
 	} else {

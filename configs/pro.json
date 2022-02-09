@@ -2,7 +2,6 @@
   "local_log_level":"INFO",
   "port":443,
   "token":"sdfsdf",
-  "provide_folder": [
-  ],
+  "provide_folder": [],
   "destination":"https://center.coldcdn.com"
 }

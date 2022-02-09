@@ -2,27 +2,31 @@ package controllers
 
 import (
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/controllers/myMiddleware"
-	"github.com/daqnext/meson.network-lts-terminal/components/echoServer"
+	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
 )
 
-func RunApi() {
-	echoServer := echoServer.GetSingleInstance()
-	//file request
-	echoServer.GET("/api/cdn/*", pathCacheFileRequestHandler, myMiddleware.CheckRandomKey)
-	echoServer.GET("*", domainCacheFileRequestHandler, myMiddleware.CheckRandomKey)
+func DeclareApi() {
+	httpServer := echoServer.GetSingleInstance()
 
-	//health and test
-	echoServer.GET("/api/health", healthHandler)
-	echoServer.GET("/api/test", testHandler)
+	//file request
+	httpServer.GET("*", cacheFileRequestHandler, myMiddleware.ParseFileRequest)
+
+	//forward request
+	//echoServer.Any("/api/forward")
 
 	//server cmd
-	echoServer.POST("/api/save", saveHandler, myMiddleware.CheckSign)
-	echoServer.POST("/api/delete", deleteHandler, myMiddleware.CheckSign)
-	echoServer.POST("/api/checklog", checkLogHandler, myMiddleware.CheckSign)
+	httpServer.POST("/api/save", saveHandler, myMiddleware.CheckSign)
+	httpServer.POST("/api/delete", deleteHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/checklog", listLogFileHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/checklog/*", checkLogHandler, myMiddleware.CheckSign)
 
 	//speed test
-	echoServer.POST("/api/pause", pauseHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/pause/:second", pauseHandler, myMiddleware.CheckSign)
+
+	//health and test
+	httpServer.GET("/api/health", healthHandler)
+	httpServer.GET("/api/test", testHandler)
 
 	//other
-	echoServer.GET("/favicon.ico", faviconHandler)
+	httpServer.GET("/favicon.ico", faviconHandler)
 }

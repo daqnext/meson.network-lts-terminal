@@ -1,8 +1,9 @@
 package myMiddleware
 
 import (
-	"log"
+	"net/http"
 
+	"github.com/daqnext/meson.network-lts-terminal/src/signMgr"
 	"github.com/labstack/echo/v4"
 )
 
@@ -29,12 +30,18 @@ import (
 
 func CheckSign(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		log.Println("befor")
+		sign := c.Request().Header.Get("Signature")
+		if sign == "" {
+			return c.String(http.StatusUnauthorized, "Signature not find")
+		}
+
+		if !signMgr.GetSingleInstance().CheckRequestLegal(sign) {
+			return c.String(http.StatusUnauthorized, "Signature error")
+		}
 
 		if err := next(c); err != nil {
 			c.Error(err)
 		}
-		log.Println("after")
 		return nil
 	}
 }
