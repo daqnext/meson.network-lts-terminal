@@ -1,9 +1,9 @@
 {
-  "local_log_level": "DEBU",
+  "log_level": "DEBU",
   "port": 0,
   "token": "",
   "provide_folder": [
     {"abs_path":"/Users/bruce/workspace/go/project/meson.network-lts-terminal/testFolder/1","size_GB":2}
   ],
-  "destination": "https://center.coldcdn.com"
+  "dest": "center.coldcdn.com"
 }

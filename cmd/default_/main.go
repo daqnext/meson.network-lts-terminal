@@ -8,7 +8,7 @@ import (
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/controllers"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/stopSingle"
 	"github.com/daqnext/meson.network-lts-terminal/plugin/cache"
-	"github.com/daqnext/meson.network-lts-terminal/src/destinationMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/destMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
 	"github.com/daqnext/meson.network-lts-terminal/src/randomKeyMgr"
@@ -25,7 +25,7 @@ import (
 
 func initComponent() {
 	cache.Init()
-	destinationMgr.Init()
+	destMgr.Init()
 	randomKeyMgr.Init()
 	signMgr.Init()
 	statusMgr.Init()

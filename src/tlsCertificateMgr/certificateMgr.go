@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/daqnext/meson-msg"
-	"github.com/daqnext/meson.network-lts-terminal/src/destinationMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/destMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/globalData"
 	"github.com/daqnext/meson.network-lts-terminal/src/requestUtil"
 )
@@ -35,7 +35,7 @@ func (c *CertMgr) CheckCertHash() (needUpdate bool, err error) {
 		return true, nil
 	}
 
-	url := destinationMgr.GetSingleInstance().GetDestUrl("/api/cert/terminaldomain/checkhash")
+	url := destMgr.GetSingleInstance().GetDestUrl("/api/cert/terminaldomain/checkhash")
 	resp, err := requestUtil.Get(url, nil, 30, globalData.Token)
 	if err != nil {
 		return false, err
@@ -79,7 +79,7 @@ func validateCert(chain []byte, key []byte) error {
 
 func (c *CertMgr) GetAndParseCert() error {
 	//get chain from server
-	url := destinationMgr.GetSingleInstance().GetDestUrl("/api/cert/terminaldomain/cert")
+	url := destMgr.GetSingleInstance().GetDestUrl("/api/cert/terminaldomain/cert")
 	resp, err := requestUtil.Get(url, nil, 30, globalData.Token)
 	if err != nil {
 		return err

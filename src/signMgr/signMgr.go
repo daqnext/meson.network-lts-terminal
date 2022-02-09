@@ -10,7 +10,7 @@ import (
 	"errors"
 
 	"github.com/daqnext/meson.network-lts-terminal/basic"
-	"github.com/daqnext/meson.network-lts-terminal/src/destinationMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/destMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/globalData"
 	"github.com/daqnext/meson.network-lts-terminal/src/randomKeyMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/requestUtil"
@@ -57,7 +57,7 @@ func parsePublicKey(buf []byte) (*rsa.PublicKey, error) {
 }
 func (s *SignMgr) GetAndParsePublicKey() error {
 	//get sign PublicKey from server
-	url := destinationMgr.GetSingleInstance().GetDestUrl("/api/terminal/publickey")
+	url := destMgr.GetSingleInstance().GetDestUrl("/api/terminal/publickey")
 	resp, err := requestUtil.Get(url, nil, 30, globalData.Token)
 	if err != nil {
 		return err

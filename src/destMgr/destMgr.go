@@ -1,4 +1,4 @@
-package destinationMgr
+package destMgr
 
 import (
 	"strconv"
