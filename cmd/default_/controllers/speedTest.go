@@ -9,7 +9,7 @@ import (
 )
 
 func pauseHandler(ctx echo.Context) error {
-	value := ctx.QueryParam("second")
+	value := ctx.Param("second")
 	pauseSecond, err := strconv.Atoi(value)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "pause time error:"+err.Error())

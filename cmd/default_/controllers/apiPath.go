@@ -16,9 +16,9 @@ func DeclareApi() {
 
 	//server cmd
 	httpServer.POST("/api/save", saveHandler, myMiddleware.CheckSign)
-	httpServer.POST("/api/delete", deleteHandler, myMiddleware.CheckSign)
-	httpServer.GET("/api/checklog", listLogFileHandler, myMiddleware.CheckSign)
-	httpServer.GET("/api/checklog/*", checkLogHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/delete/:nameHash", deleteHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/checklog", listLogFileHandler)
+	httpServer.GET("/api/checklog/*", checkLogHandler)
 
 	//speed test
 	httpServer.GET("/api/pause/:second", pauseHandler, myMiddleware.CheckSign)

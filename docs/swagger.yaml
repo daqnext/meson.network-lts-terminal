@@ -1,0 +1,96 @@
+definitions:
+  meson_msg.SaveFileMsg:
+    properties:
+      nameHash:
+        type: string
+      originUrl:
+        items:
+          type: string
+        type: array
+      sizeLimit:
+        type: integer
+    type: object
+host: spec-00-02-015-bchkakakbxxxxxx-019-thisisthebinddomain.mesontrackingdomain.com
+info:
+  contact:
+    email: contact@meson.network
+    name: Meson Support
+    url: https://meson.network
+  description: meson terminal's api
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://meson.network
+  title: Meson Terminal API
+  version: "1.0"
+paths:
+  /api/delete/:nameHash:
+    get:
+      description: delete file on terminal disk
+      parameters:
+      - description: 0dea69026ee1c698
+        in: path
+        name: nameHash
+        required: true
+        type: string
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: '{"msg": "who    are  you"}'
+          schema:
+            type: string
+        "401":
+          description: err info
+          schema:
+            type: string
+      summary: delete file command
+      tags:
+      - server cmd
+  /api/save:
+    post:
+      consumes:
+      - application/json
+      description: save file from given url
+      parameters:
+      - description: save command object
+        in: body
+        name: SaveFileMsg
+        required: true
+        schema:
+          $ref: '#/definitions/meson_msg.SaveFileMsg'
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: '{"msg": "who    are  you"}'
+          schema:
+            type: string
+        "401":
+          description: err info
+          schema:
+            type: string
+      summary: save file command
+      tags:
+      - server cmd
+schemes:
+- https
+swagger: "2.0"

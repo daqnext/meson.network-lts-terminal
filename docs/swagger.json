@@ -1,0 +1,144 @@
+{
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "meson terminal's api",
+        "title": "Meson Terminal API",
+        "termsOfService": "https://meson.network",
+        "contact": {
+            "name": "Meson Support",
+            "url": "https://meson.network",
+            "email": "contact@meson.network"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "spec-00-02-015-bchkakakbxxxxxx-019-thisisthebinddomain.mesontrackingdomain.com",
+    "paths": {
+        "/api/delete/:nameHash": {
+            "get": {
+                "description": "delete file on terminal disk",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "delete file command",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "0dea69026ee1c698",
+                        "name": "nameHash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"msg\": \"who    are  you\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "err info",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/save": {
+            "post": {
+                "description": "save file from given url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "save file command",
+                "parameters": [
+                    {
+                        "description": "save command object",
+                        "name": "SaveFileMsg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/meson_msg.SaveFileMsg"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"msg\": \"who    are  you\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "err info",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "meson_msg.SaveFileMsg": {
+            "type": "object",
+            "properties": {
+                "nameHash": {
+                    "type": "string"
+                },
+                "originUrl": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sizeLimit": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
