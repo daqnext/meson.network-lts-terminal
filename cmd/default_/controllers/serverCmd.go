@@ -86,3 +86,15 @@ func checkLogHandler(ctx echo.Context) error {
 	file := ctx.Param("*")
 	return ctx.File(filepath.Join(path_util.GetAbsPath("./logs"), file))
 }
+
+func restartHandler(ctx echo.Context) error {
+	return ctx.String(200, "")
+}
+
+func scheduleJobStatusHandler(ctx echo.Context) error {
+	return ctx.String(200, "")
+}
+
+func nodeStatusHandler(ctx echo.Context) error {
+	return ctx.String(200, "")
+}

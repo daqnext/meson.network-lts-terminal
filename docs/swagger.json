@@ -68,6 +68,80 @@
                 }
             }
         },
+        "/api/health": {
+            "get": {
+                "description": "health check",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "public"
+                ],
+                "summary": "health check",
+                "responses": {
+                    "200": {
+                        "description": "UTC time string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pause/:second": {
+            "get": {
+                "description": "pause file transfer for several seconds, and do speed test",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "pause file transfer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "4",
+                        "name": "second",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"msg\": \"who    are  you\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "err info",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/save": {
             "post": {
                 "description": "save file from given url",
@@ -114,6 +188,32 @@
                     },
                     "401": {
                         "description": "err info",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/test": {
+            "get": {
+                "description": "test api",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "public"
+                ],
+                "summary": "test",
+                "responses": {
+                    "200": {
+                        "description": "UTC time string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
                         "schema": {
                             "type": "string"
                         }

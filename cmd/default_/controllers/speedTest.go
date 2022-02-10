@@ -8,6 +8,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Summary      pause file transfer
+// @Description  pause file transfer for several seconds, and do speed test
+// @Tags         server cmd
+// @Produce      json
+// @Param        second  path  string  true  "4"
+// @Param        Signature  header  string  true  "sdfwefwfwfwfsdfwfwf"
+// @Success      200  {string}  string  "{"msg": "hello  Razeen"}"
+// @Failure      400  {string}  string  "{"msg": "who    are  you"}"
+// @Failure      401  {string}  string  "err info"
+// @Router      /api/pause/:second [get]
 func pauseHandler(ctx echo.Context) error {
 	value := ctx.Param("second")
 	pauseSecond, err := strconv.Atoi(value)

@@ -56,6 +56,55 @@ paths:
       summary: delete file command
       tags:
       - server cmd
+  /api/health:
+    get:
+      description: health check
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: UTC time string
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+      summary: health check
+      tags:
+      - public
+  /api/pause/:second:
+    get:
+      description: pause file transfer for several seconds, and do speed test
+      parameters:
+      - description: "4"
+        in: path
+        name: second
+        required: true
+        type: string
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: '{"msg": "who    are  you"}'
+          schema:
+            type: string
+        "401":
+          description: err info
+          schema:
+            type: string
+      summary: pause file transfer
+      tags:
+      - server cmd
   /api/save:
     post:
       consumes:
@@ -91,6 +140,23 @@ paths:
       summary: save file command
       tags:
       - server cmd
+  /api/test:
+    get:
+      description: test api
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: UTC time string
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+      summary: test
+      tags:
+      - public
 schemes:
 - https
 swagger: "2.0"
