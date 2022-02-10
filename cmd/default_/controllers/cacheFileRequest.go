@@ -47,6 +47,13 @@ import (
 //	return ctx.String(200, uri)
 //}
 
+// @Summary      get cached file
+// @Description  get cached file
+// @Tags         public
+// @Success      200  {string}  string  "{"msg": "hello  Razeen"}"
+// @Failure      400  {string}  string  "error msg"
+// @Failure      401  {string}  string  "Unauthorized"
+// @Router       /anyPath [get]
 func cacheFileRequestHandler(ctx echo.Context) error {
 	bindName := ctx.Get("bindName").(string)
 	fileName := ctx.Get("fileName").(string)

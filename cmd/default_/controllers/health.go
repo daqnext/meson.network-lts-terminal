@@ -11,7 +11,6 @@ import (
 // @Tags         public
 // @Produce      plain
 // @Success      200  {string}  string  "UTC time string"
-// @Failure      404  {string}  string  "not found"
 // @Router       /api/health [get]
 func healthHandler(ctx echo.Context) error {
 	return ctx.String(200, time.Now().UTC().String())
@@ -22,7 +21,6 @@ func healthHandler(ctx echo.Context) error {
 // @Tags         public
 // @Produce      plain
 // @Success      200  {string}  string  "UTC time string"
-// @Failure      404  {string}  string  "not found"
 // @Router       /api/test [get]
 func testHandler(ctx echo.Context) error {
 	return ctx.String(200, time.Now().UTC().String())

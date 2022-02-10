@@ -8,6 +8,7 @@ require (
 	github.com/daqnext/diskmgr v0.0.0-20220114083056-8e26496ae91d
 	github.com/daqnext/downloadmgr v0.0.0-20211124030451-426bcbdad734
 	github.com/daqnext/meson-msg v0.0.0-20220207071453-2589ea31aef4
+	github.com/daqnext/meson.network-lts-common v0.0.0-20220210062705-1a1543d66477
 	github.com/fatih/color v1.13.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/imroc/req v0.3.2

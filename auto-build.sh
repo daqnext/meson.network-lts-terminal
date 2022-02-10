@@ -2,16 +2,16 @@
 # Copyright 2020 Daqnext Foundation Ltd.
 
 VERSION="v3.0.0"
-COPY_FILES=({"assets","configs"})
+COPY_FILES=("configs/pro.json")
 
 generate_tar() {
-  touch "./build/$1/${VERSION}"
-  cp -r ${COPY_FILES[*]} "./build/$1" && cd build && tar -czvf "$1.tar.gz" $1 && rm -rf $1 && cd ..|| exit
+  mkdir "./build/$1/configs"
+  cp  "configs/pro.json" "./build/$1/configs/pro.json" && cd build && tar -czvf "$1.tar.gz" $1 && rm -rf $1 && cd ..|| exit
 }
 
 generate_zip(){
-  touch "./build/$1/${VERSION}"
-  cp -r ${COPY_FILES[*]} "./build/$1" && cd build && zip -r "$1.zip" $1 && rm -rf $1 && cd ..|| exit
+  mkdir "./build/$1/configs"
+  cp "configs/pro.json" "./build/$1/configs/pro.json" && cd build && zip -r "$1.zip" $1 && rm -rf $1 && cd ..|| exit
 }
 
 rm -f -R ./build

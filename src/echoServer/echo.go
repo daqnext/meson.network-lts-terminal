@@ -101,9 +101,9 @@ http_port
 http_static_rel_folder
 */
 func Init() error {
-	http_port, err := configuration.Config.GetInt("http_port", 8080)
+	http_port, err := configuration.Config.GetInt("port", 8080)
 	if err != nil {
-		return errors.New("http_port [int] in config error," + err.Error())
+		return errors.New("port [int] in config error," + err.Error())
 	}
 
 	s := &EchoServer{
@@ -137,23 +137,27 @@ func (s *EchoServer) UseJsoniter() {
 
 func (s *EchoServer) Start() error {
 	basic.Logger.Debugln("http server started on port :" + strconv.Itoa(s.Http_port))
+	s.Echo.Server.SetKeepAlivesEnabled(false)
 	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 }
 
 func (s *EchoServer) Restart() error {
 	s.Shutdown()
 	time.Sleep(5 * time.Second)
+	s.Echo.Server.SetKeepAlivesEnabled(false)
 	return s.Start()
 }
 
 func (s *EchoServer) StartTLS(certFile, keyFile interface{}) error {
 	basic.Logger.Debugln("https server started on port :" + strconv.Itoa(s.Http_port))
+	s.Echo.TLSServer.SetKeepAlivesEnabled(false)
 	return s.Echo.StartTLS(":"+strconv.Itoa(s.Http_port), certFile, keyFile)
 }
 
 func (s *EchoServer) RestartTls(certFile, keyFile interface{}) error {
 	s.Shutdown()
 	time.Sleep(5 * time.Second)
+	s.Echo.TLSServer.SetKeepAlivesEnabled(false)
 	return s.StartTLS(certFile, keyFile)
 }
 

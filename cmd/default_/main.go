@@ -1,12 +1,14 @@
 package default_
 
 import (
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/daqnext/meson.network-lts-terminal/basic"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/controllers"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/default_/stopSingle"
+	"github.com/daqnext/meson.network-lts-terminal/configuration"
 	"github.com/daqnext/meson.network-lts-terminal/plugin/cache"
 	"github.com/daqnext/meson.network-lts-terminal/src/destMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
@@ -18,9 +20,10 @@ import (
 	"github.com/daqnext/meson.network-lts-terminal/src/versionMgr"
 	"github.com/daqnext/meson.network-lts-terminal/tools"
 	"github.com/fatih/color"
+	"github.com/universe-30/USafeGo"
 	"github.com/urfave/cli/v2"
 
-	"github.com/universe-30/USafeGo"
+	_ "net/http/pprof"
 )
 
 func initComponent() {
@@ -115,6 +118,15 @@ func StartDefault(clictx *cli.Context) {
 
 	//diskMgr
 	//startDiskMgr()
+
+	//for pprof
+	//todo if in dev
+	runMode, _ := configuration.Config.GetString("run_mode", "pro")
+	if runMode == "dev" {
+		go func() {
+			log.Println(http.ListenAndServe(":18888", nil))
+		}()
+	}
 
 	//echo server
 	startEchoServer()

@@ -1,5 +1,5 @@
 {
-  "log_level":"INFO",
+  "log_level":"DEBU",
   "port":443,
   "token":"sdfsdf",
   "provide_folder": [],

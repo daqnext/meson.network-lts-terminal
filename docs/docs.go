@@ -25,6 +25,35 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/anyPath": {
+            "get": {
+                "description": "get cached file",
+                "tags": [
+                    "public"
+                ],
+                "summary": "get cached file",
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error msg",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/delete/:nameHash": {
             "get": {
                 "description": "delete file on terminal disk",
@@ -65,7 +94,7 @@ const docTemplate_swagger = `{
                         }
                     },
                     "401": {
-                        "description": "err info",
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -89,9 +118,44 @@ const docTemplate_swagger = `{
                         "schema": {
                             "type": "string"
                         }
+                    }
+                }
+            }
+        },
+        "/api/nodestatus": {
+            "get": {
+                "description": "get node status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "get node status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
-                    "404": {
-                        "description": "not found",
+                    "400": {
+                        "description": "error msg",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -133,13 +197,61 @@ const docTemplate_swagger = `{
                         }
                     },
                     "400": {
-                        "description": "{\"msg\": \"who    are  you\"}",
+                        "description": "error msg",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "401": {
-                        "description": "err info",
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/restart": {
+            "get": {
+                "description": "restart node command",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "restart node command",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "0dea69026ee1c698",
+                        "name": "nameHash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error msg",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -192,7 +304,55 @@ const docTemplate_swagger = `{
                         }
                     },
                     "401": {
-                        "description": "err info",
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedulejobstatus": {
+            "get": {
+                "description": "check ScheduleJob running status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "check ScheduleJob running status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "0dea69026ee1c698",
+                        "name": "nameHash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error msg",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -216,9 +376,23 @@ const docTemplate_swagger = `{
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    "404": {
-                        "description": "not found",
+                    }
+                }
+            }
+        },
+        "/favicon": {
+            "get": {
+                "description": "handle favicon request",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "public"
+                ],
+                "summary": "handle favicon request",
+                "responses": {
+                    "200": {
+                        "description": "empty string",
                         "schema": {
                             "type": "string"
                         }

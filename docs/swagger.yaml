@@ -24,6 +24,25 @@ info:
   title: Meson Terminal API
   version: "1.0"
 paths:
+  /anyPath:
+    get:
+      description: get cached file
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: error msg
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: get cached file
+      tags:
+      - public
   /api/delete/:nameHash:
     get:
       description: delete file on terminal disk
@@ -50,7 +69,7 @@ paths:
           schema:
             type: string
         "401":
-          description: err info
+          description: Unauthorized
           schema:
             type: string
       summary: delete file command
@@ -66,13 +85,36 @@ paths:
           description: UTC time string
           schema:
             type: string
-        "404":
-          description: not found
-          schema:
-            type: string
       summary: health check
       tags:
       - public
+  /api/nodestatus:
+    get:
+      description: get node status
+      parameters:
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: error msg
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: get node status
+      tags:
+      - server cmd
   /api/pause/:second:
     get:
       description: pause file transfer for several seconds, and do speed test
@@ -95,14 +137,46 @@ paths:
           schema:
             type: string
         "400":
-          description: '{"msg": "who    are  you"}'
+          description: error msg
           schema:
             type: string
         "401":
-          description: err info
+          description: Unauthorized
           schema:
             type: string
       summary: pause file transfer
+      tags:
+      - server cmd
+  /api/restart:
+    get:
+      description: restart node command
+      parameters:
+      - description: 0dea69026ee1c698
+        in: path
+        name: nameHash
+        required: true
+        type: string
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: error msg
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: restart node command
       tags:
       - server cmd
   /api/save:
@@ -134,10 +208,42 @@ paths:
           schema:
             type: string
         "401":
-          description: err info
+          description: Unauthorized
           schema:
             type: string
       summary: save file command
+      tags:
+      - server cmd
+  /api/schedulejobstatus:
+    get:
+      description: check ScheduleJob running status
+      parameters:
+      - description: 0dea69026ee1c698
+        in: path
+        name: nameHash
+        required: true
+        type: string
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: error msg
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: check ScheduleJob running status
       tags:
       - server cmd
   /api/test:
@@ -150,11 +256,20 @@ paths:
           description: UTC time string
           schema:
             type: string
-        "404":
-          description: not found
+      summary: test
+      tags:
+      - public
+  /favicon:
+    get:
+      description: handle favicon request
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: empty string
           schema:
             type: string
-      summary: test
+      summary: handle favicon request
       tags:
       - public
 schemes:

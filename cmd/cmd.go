@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/daqnext/meson.network-lts-terminal/cmd/log"
 	"github.com/daqnext/meson.network-lts-terminal/cmd/service"
 	"github.com/daqnext/meson.network-lts-terminal/configuration"
+	"github.com/daqnext/meson.network-lts-terminal/src/versionMgr"
 	"github.com/universe-30/ULog"
 	"github.com/universe-30/UUtils/path_util"
 	"github.com/urfave/cli/v2"
@@ -40,15 +42,22 @@ func ConfigCmd() *cli.App {
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
 			path_util.ExEPathPrintln()
-			logerr := setLoggerLevel()
-			if logerr != nil {
-				return logerr
-			}
 			default_.StartDefault(clictx)
 			return nil
 		},
 
 		Commands: []*cli.Command{
+			{
+				Name:  "version",
+				Usage: "print version info",
+				//Flags: log.GetFlags(),
+				Action: func(clictx *cli.Context) error {
+					versionMgr.Init()
+					v := versionMgr.GetSingleInstance().GetVersion()
+					fmt.Println("version: v" + v)
+					return nil
+				},
+			},
 			{
 				Name:  CMD_NAME_LOG,
 				Usage: "print all logs",
@@ -68,10 +77,6 @@ func ConfigCmd() *cli.App {
 						Name:  "show",
 						Usage: "show configs",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							return nil
 						},
 					},
@@ -82,10 +87,6 @@ func ConfigCmd() *cli.App {
 						Flags: config.GetFlags(),
 						Action: func(clictx *cli.Context) error {
 							path_util.ExEPathPrintln()
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							config.ConfigSetting(clictx)
 							return nil
 						},
@@ -101,10 +102,6 @@ func ConfigCmd() *cli.App {
 						Name:  "install",
 						Usage: "install meson node in service",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -114,10 +111,6 @@ func ConfigCmd() *cli.App {
 						Name:  "remove",
 						Usage: "remove meson node from service",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -127,10 +120,6 @@ func ConfigCmd() *cli.App {
 						Name:  "start",
 						Usage: "run",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -140,10 +129,6 @@ func ConfigCmd() *cli.App {
 						Name:  "stop",
 						Usage: "stop",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -153,10 +138,6 @@ func ConfigCmd() *cli.App {
 						Name:  "restart",
 						Usage: "restart",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -166,10 +147,6 @@ func ConfigCmd() *cli.App {
 						Name:  "status",
 						Usage: "show process status",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -184,14 +161,14 @@ func ConfigCmd() *cli.App {
 func readDefaultConfig(isDev bool) (*configuration.VConfig, string, error) {
 	var defaultConfigPath string
 	if isDev {
-		basic.Logger.Infoln("======== using dev mode ========")
+		basic.Logger.Debugln("======== using dev mode ========")
 		defaultConfigPath = path_util.GetAbsPath("configs/dev.json")
 	} else {
-		basic.Logger.Infoln("======== using pro mode ========")
+		basic.Logger.Debugln("======== using pro mode ========")
 		defaultConfigPath = path_util.GetAbsPath("configs/pro.json")
 	}
 
-	basic.Logger.Infoln("config file:", defaultConfigPath)
+	basic.Logger.Debugln("config file:", defaultConfigPath)
 
 	config, err := configuration.ReadConfig(defaultConfigPath)
 	if err != nil {
@@ -209,11 +186,17 @@ func iniConfig(isDev bool) error {
 	if err != nil {
 		return err
 	}
-	basic.Logger.Infoln("======== start of config ========")
-	configs, _ := config.GetConfigAsString()
-	basic.Logger.Infoln(configs)
-	basic.Logger.Infoln("======== end  of  config ========")
 	configuration.Config = config
+	logerr := setLoggerLevel()
+	if logerr != nil {
+		return logerr
+	}
+
+	basic.Logger.Debugln("======== start of config ========")
+	configs, _ := config.GetConfigAsString()
+	basic.Logger.Debugln(configs)
+	basic.Logger.Debugln("======== end  of  config ========")
+
 	return nil
 }
 
@@ -221,7 +204,7 @@ func setLoggerLevel() error {
 	logLevel := "INFO"
 	if configuration.Config != nil {
 		var err error
-		logLevel, err = configuration.Config.GetString("local_log_level", "INFO")
+		logLevel, err = configuration.Config.GetString("log_level", "INFO")
 		if err != nil {
 			return err
 		}

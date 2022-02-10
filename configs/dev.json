@@ -1,5 +1,6 @@
 {
   "log_level": "DEBU",
+  "run_mode": "dev",
   "port": 0,
   "token": "",
   "provide_folder": [

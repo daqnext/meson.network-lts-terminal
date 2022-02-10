@@ -15,8 +15,8 @@ import (
 // @Param        second  path  string  true  "4"
 // @Param        Signature  header  string  true  "sdfwefwfwfwfsdfwfwf"
 // @Success      200  {string}  string  "{"msg": "hello  Razeen"}"
-// @Failure      400  {string}  string  "{"msg": "who    are  you"}"
-// @Failure      401  {string}  string  "err info"
+// @Failure      400  {string}  string  "error msg"
+// @Failure      401  {string}  string  "Unauthorized"
 // @Router      /api/pause/:second [get]
 func pauseHandler(ctx echo.Context) error {
 	value := ctx.Param("second")
