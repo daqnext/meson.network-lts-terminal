@@ -12,13 +12,18 @@ func DeclareApi() {
 	httpServer.GET("*", cacheFileRequestHandler, myMiddleware.ParseFileRequest)
 
 	//forward request
-	//echoServer.Any("/api/forward")
+	//httpServer.Any("/api/forward")
 
 	//server cmd
 	httpServer.POST("/api/save", saveHandler, myMiddleware.CheckSign)
-	httpServer.POST("/api/delete", deleteHandler, myMiddleware.CheckSign)
-	httpServer.GET("/api/checklog", listLogFileHandler, myMiddleware.CheckSign)
-	httpServer.GET("/api/checklog/*", checkLogHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/delete/:nameHash", deleteHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/restart", restartHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/schedulejobstatus", scheduleJobStatusHandler, myMiddleware.CheckSign)
+	httpServer.GET("/api/nodestatus", nodeStatusHandler, myMiddleware.CheckSign)
+
+	//log
+	httpServer.GET("/api/checklog", listLogFileHandler)
+	httpServer.GET("/api/checklog/*", checkLogHandler)
 
 	//speed test
 	httpServer.GET("/api/pause/:second", pauseHandler, myMiddleware.CheckSign)

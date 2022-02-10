@@ -87,7 +87,7 @@ func checkAndSetConfig() {
 		var myport string
 		_, err := fmt.Scanln(&myport)
 		if err != nil {
-			UsingPort = "19091"
+			//UsingPort = "19091"
 			fmt.Println("read input port error,server will be run in port:443.You can modify this value with command: ./meson config set -port=xxx")
 		}
 	}
