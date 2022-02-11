@@ -1,97 +1,112 @@
 package provideFolderHandler
 
 import (
+	"errors"
 	"fmt"
+	"path/filepath"
 
+	"github.com/daqnext/diskmgr"
 	"github.com/daqnext/diskmgr/folderMgr"
 	"github.com/daqnext/meson.network-lts-terminal/configuration"
-	"github.com/urfave/cli/v2"
+	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
+	"github.com/universe-30/UUtils/path_util"
 )
 
-func handleAddPath(newFolderPath string) (modified bool, err error) {
-
-	provideFolders := []folderMgr.FolderConfig{}
-	provide_folder := configuration.Config.Get("provide_folder", nil)
-	iArray, ok := provide_folder.([]interface{})
-	if !ok {
-
-		//...
-		return false
+func HandleAddPath(newFolderPath string) (err error) {
+	//read exist path from config
+	provideFolder, err := configuration.Config.GetProvideFolders()
+	if err == configuration.ErrProvideFolderType || err == configuration.ErrProvideFolderContent {
+		fmt.Println("the exist provide folder configuration is invalid, it will be deleted")
 	}
-	folderPath := new
-	//check path legal
-	//...
 
-	for _, v := range iArray {
-		m := v.(map[string]interface{})
-		if m["abs_path"].(string) == newFolderPath {
-			fmt.Println("path already exist")
-			return false
+	//transfer path to abs path
+	folderToAdd := filepath.Clean(newFolderPath)
+	if !filepath.IsAbs(folderToAdd) {
+		folderToAdd = path_util.GetAbsPath(folderToAdd)
+	}
+
+	for _, v := range provideFolder {
+		if v.AbsPath == folderToAdd {
+			return errors.New(fmt.Sprintf("The path <%s> is already exist", folderToAdd))
 		}
-		pf := folderMgr.FolderConfig{
-			AbsPath: m["abs_path"].(string),
-			SizeGB:  int(m["size_GB"].(float64)),
-		}
-		provideFolders = append(provideFolders, pf)
 	}
 
 	//input size
 	var size int
-
-	fmt.Printf("Please input provider folder size: ")
-	_, err := fmt.Scanln(&size)
-	if err != nil {
-		fmt.Errorf("read input size error: %s", err.Error())
-		return false
-	}
-	if size < 20 {
-		fmt.Errorf("minimum size is 20 GB")
-		return false
-	}
-
-	pf := folderMgr.FolderConfig{
-		AbsPath: folderPath,
-		SizeGB:  size,
-	}
-	provideFolders = append(provideFolders, pf)
-	configuration.Config.Set("provide_folder", provideFolders)
-	fmt.Println("new folder added:", folderPath, "size", size, "GB")
-	return true
-
-}
-
-func handleRemovePath(clictx *cli.Context) (modified bool) {
-
-	provideFolders := []folderMgr.FolderConfig{}
-	provide_folder := configuration.Config.Get("provide_folder", nil)
-	iArray, ok := provide_folder.([]interface{})
-	if !ok {
-
-		//...
-		return
-	}
-	value := clictx.String("removepath")
-	removed := false
-	for _, v := range iArray {
-		m := v.(map[string]interface{})
-		if m["abs_path"].(string) == value {
-			removed = true
+	for {
+		fmt.Println("Please input provider folder size(For example if you provide 100GB, please input 100, only support integer).")
+		fmt.Printf("%d GB disk space is the minimum. Please make sure you have enough free space:", diskFileMgr.BottomSizeGB)
+		_, err := fmt.Scanln(&size)
+		if err != nil {
+			fmt.Println("read input size error:", err)
 			continue
 		}
-		pf := folderMgr.FolderConfig{
-			AbsPath: m["abs_path"].(string),
-			SizeGB:  int(m["size_GB"].(float64)),
+		if size < diskFileMgr.BottomSizeGB {
+			fmt.Printf("minimum size is %d GB\n", diskFileMgr.BottomSizeGB)
+			continue
 		}
-		provideFolders = append(provideFolders, pf)
+		break
 	}
 
-	if removed {
-		configuration.Config.Set("provide_folder", provideFolders)
-		fmt.Println("path removed:", value)
-		return true
+	//check folder size
+	err = diskmgr.CheckFolder(folderToAdd, size, diskFileMgr.CheckLimitGB, diskFileMgr.BottomSizeGB)
+	if err != nil {
+		return err
+	}
+
+	newFolder := folderMgr.FolderConfig{
+		AbsPath: folderToAdd,
+		SizeGB:  size,
+	}
+
+	provideFolder = append(provideFolder, newFolder)
+
+	configuration.Config.SetProvideFolders(provideFolder)
+	err = configuration.Config.WriteConfig()
+	if err != nil {
+		//todo handle save err
+
+		return
+	}
+	//todo add color
+	fmt.Println("new folder added:", folderToAdd, "size:", size, "GB")
+	return nil
+}
+
+func HandleRemovePath(pathToRemove string) (err error) {
+	//read exist path from config
+	provideFolder, err := configuration.Config.GetProvideFolders()
+	if err == configuration.ErrProvideFolderType || err == configuration.ErrProvideFolderContent {
+		fmt.Println("the exist provide folder configuration is invalid, it will be deleted")
+	}
+
+	//transfer path to abs path
+	folderToRemove := filepath.Clean(pathToRemove)
+	if !filepath.IsAbs(folderToRemove) {
+		folderToRemove = path_util.GetAbsPath(folderToRemove)
+	}
+
+	exist := false
+	for i, v := range provideFolder {
+		if v.AbsPath == folderToRemove {
+			exist = true
+			provideFolder = append(provideFolder[:i], provideFolder[i+1:]...)
+			break
+		}
+	}
+
+	if !exist {
+		return errors.New(fmt.Sprintf("The path <%s> is not exist", folderToRemove))
 	} else {
-		fmt.Println("removepath failed, path not exist")
-		return false
-	}
+		configuration.Config.SetProvideFolders(provideFolder)
+		err = configuration.Config.WriteConfig()
+		if err != nil {
+			//todo handle save err
 
+			return
+		}
+		//todo add color
+		fmt.Println("path removed:", folderToRemove)
+		return nil
+	}
 }

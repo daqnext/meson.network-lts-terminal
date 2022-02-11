@@ -1,7 +1,7 @@
 {
-  "log_level":"DEBU",
-  "port":443,
-  "token":"sdfsdf",
+  "dest": "center.coldcdn.com",
+  "log_level": "DEBU",
+  "port": 443,
   "provide_folder": [],
-  "dest":"center.coldcdn.com"
+  "token": "sdfsdf"
 }

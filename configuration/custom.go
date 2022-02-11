@@ -38,6 +38,6 @@ func (c *VConfig) GetProvideFolders() ([]folderMgr.FolderConfig, error) {
 	return provideFolders, nil
 }
 
-func SetProvideFolders(pf []folderMgr.FolderConfig) {
-	Config.Set("provide_folder", pf)
+func (c *VConfig) SetProvideFolders(pf []folderMgr.FolderConfig) {
+	c.Set("provide_folder", pf)
 }

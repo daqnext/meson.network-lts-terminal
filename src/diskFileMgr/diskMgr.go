@@ -10,6 +10,9 @@ import (
 
 var dm diskmgr.IDiskMgr
 
+const CheckLimitGB = 5 //todo set 40 in production
+const BottomSizeGB = 5
+
 func Init() error {
 
 	var err error
@@ -32,9 +35,7 @@ func new() (diskmgr.IDiskMgr, error) {
 		return nil, err
 	}
 
-	d := diskmgr.New()
-	d.SetLogger(basic.Logger)
-	d.SetPanicHandler(tools.PanicHandler)
+	d := diskmgr.New(basic.Logger, tools.PanicHandler)
 
 	err = d.StartUp(
 		provideFolder,

@@ -49,7 +49,6 @@ func Post(url string, param req.Param, bodyJson interface{}, timeoutSecond int, 
 	}
 	if authorizationToken != "" {
 		header = req.Header{
-			"Accept":        "application/json",
 			"Authorization": "Basic " + authorizationToken,
 		}
 	}

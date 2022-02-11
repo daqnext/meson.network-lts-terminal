@@ -41,7 +41,7 @@ func ConfigCmd() *cli.App {
 
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
-			path_util.ExEPathPrintln()
+			//path_util.ExEPathPrintln()
 			default_.StartDefault(clictx)
 			return nil
 		},
@@ -63,7 +63,7 @@ func ConfigCmd() *cli.App {
 				Usage: "print all logs",
 				Flags: log.GetFlags(),
 				Action: func(clictx *cli.Context) error {
-					path_util.ExEPathPrintln()
+					//path_util.ExEPathPrintln()
 					log.StartLog(clictx)
 					return nil
 				},
@@ -86,7 +86,7 @@ func ConfigCmd() *cli.App {
 						Usage: "set config",
 						Flags: config.GetFlags(),
 						Action: func(clictx *cli.Context) error {
-							path_util.ExEPathPrintln()
+							//path_util.ExEPathPrintln()
 							config.ConfigSetting(clictx)
 							return nil
 						},
