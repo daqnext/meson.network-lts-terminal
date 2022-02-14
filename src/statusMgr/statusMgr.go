@@ -3,13 +3,14 @@ package statusMgr
 import (
 	"bytes"
 	"fmt"
-	sysnet "net"
 	"os/exec"
 	"runtime"
 	"time"
 
 	meson_msg "github.com/daqnext/meson-msg"
 	"github.com/daqnext/meson.network-lts-terminal/basic"
+	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
 	"github.com/daqnext/meson.network-lts-terminal/src/versionMgr"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
@@ -23,6 +24,9 @@ type StatusMgr struct {
 var statusMgr *StatusMgr
 
 func Init() {
+	if statusMgr != nil {
+		return
+	}
 	statusMgr = &StatusMgr{}
 }
 
@@ -41,26 +45,26 @@ func RunCommand(cmdstring string, args ...string) (string, error) {
 	return out.String(), err
 }
 
-func getMainMacAddress() (string, error) {
-	ifas, err := sysnet.Interfaces()
-	if err != nil {
-		return "", err
-	}
-
-	ans := ""
-	ansIndex := 1024
-
-	for _, ifa := range ifas {
-		// fmt.Printf("%+v %+v\n", ifa, uint(ifa.Flags))
-
-		// Flags(19) means `up|broadcast|multicast`
-		if ifa.Flags == sysnet.Flags(19) && ifa.Index < ansIndex {
-			ans = ifa.HardwareAddr.String()
-			ansIndex = ifa.Index
-		}
-	}
-	return ans, nil
-}
+//func getMainMacAddress() (string, error) {
+//	ifas, err := sysnet.Interfaces()
+//	if err != nil {
+//		return "", err
+//	}
+//
+//	ans := ""
+//	ansIndex := 1024
+//
+//	for _, ifa := range ifas {
+//		// fmt.Printf("%+v %+v\n", ifa, uint(ifa.Flags))
+//
+//		// Flags(19) means `up|broadcast|multicast`
+//		if ifa.Flags == sysnet.Flags(19) && ifa.Index < ansIndex {
+//			ans = ifa.HardwareAddr.String()
+//			ansIndex = ifa.Index
+//		}
+//	}
+//	return ans, nil
+//}
 
 //func calAverageNetSpeed() {
 //	go func() {
@@ -97,7 +101,7 @@ func getMachineSetupTime() string {
 		result, err := RunCommand("/bin/bash", "-c", "ls -lact --full-time /etc | tail -1 |awk '{print $6,$7}'")
 		if err != nil {
 			basic.Logger.Debugln("aws ec2 run command err", "err", err)
-			return "unknown"
+			return "linux unknown"
 		}
 		basic.Logger.Debugln("machine setup time", "time", result)
 		return result
@@ -131,15 +135,15 @@ func (s *StatusMgr) GetMachineStatus() {
 		s.Status.MachineSetupTime = getMachineSetupTime()
 	}
 
-	//if s.Status.Port == "" {
-	//	s.Status.Port = config.UsingPort
-	//}
+	if s.Status.Port == 0 {
+		s.Status.Port = echoServer.GetSingleInstance().Http_port
+	}
 
 	//need update data
 	//memory
 	if v, err := mem.VirtualMemory(); err == nil {
-		s.Status.MemTotal = v.Total
-		s.Status.MemAvailable = v.Available
+		s.Status.MemTotal = int64(v.Total)
+		s.Status.MemAvailable = int64(v.Available)
 	}
 
 	//cpu usage
@@ -151,8 +155,9 @@ func (s *StatusMgr) GetMachineStatus() {
 
 	s.Status.Version = versionMgr.GetSingleInstance().CurrentVersion
 
-	//s.Status.Version = global.VersionMgr.CurrentVersion
-
 	//disk
+	total, used, _ := diskFileMgr.GetSingleInstance().GetSpaceInfo()
+	s.Status.CdnDiskTotal = total
+	s.Status.CdnDiskUsed = used
 
 }

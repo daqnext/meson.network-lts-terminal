@@ -23,6 +23,9 @@ type CertMgr struct {
 var certMgr *CertMgr
 
 func Init() {
+	if certMgr != nil {
+		return
+	}
 	certMgr = &CertMgr{}
 }
 

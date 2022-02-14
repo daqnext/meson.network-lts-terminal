@@ -35,6 +35,9 @@ type Service struct {
 var service *Service
 
 func Init() {
+	if service != nil {
+		return
+	}
 	service = newDaemonService()
 }
 

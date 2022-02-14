@@ -1,7 +1,7 @@
 {
   "dest": "center.coldcdn.com",
   "log_level": "DEBU",
-  "port": 443,
+  "port": 8080,
   "provide_folder": [],
-  "token": "sdfsdf"
+  "token": ""
 }

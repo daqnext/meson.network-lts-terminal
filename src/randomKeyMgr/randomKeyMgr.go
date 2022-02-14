@@ -14,6 +14,9 @@ type RandomKeyMgr struct {
 var randomKeyMgr *RandomKeyMgr
 
 func Init() {
+	if randomKeyMgr != nil {
+		return
+	}
 	randomKeyMgr = &RandomKeyMgr{}
 }
 

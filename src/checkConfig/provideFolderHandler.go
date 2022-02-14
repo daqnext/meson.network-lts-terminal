@@ -1,4 +1,4 @@
-package provideFolderHandler
+package checkConfig
 
 import (
 	"errors"
@@ -12,9 +12,9 @@ import (
 	"github.com/universe-30/UUtils/path_util"
 )
 
-func HandleAddPath(newFolderPath string) (err error) {
+func HandleAddPath(newFolderPath string) (newPath string, sizeGB int, provideFolder []folderMgr.FolderConfig, err error) {
 	//read exist path from config
-	provideFolder, err := configuration.Config.GetProvideFolders()
+	provideFolder, err = configuration.Config.GetProvideFolders()
 	if err == configuration.ErrProvideFolderType || err == configuration.ErrProvideFolderContent {
 		fmt.Println("the exist provide folder configuration is invalid, it will be deleted")
 	}
@@ -27,7 +27,7 @@ func HandleAddPath(newFolderPath string) (err error) {
 
 	for _, v := range provideFolder {
 		if v.AbsPath == folderToAdd {
-			return errors.New(fmt.Sprintf("The path <%s> is already exist", folderToAdd))
+			return "", 0, nil, errors.New(fmt.Sprintf("The path <%s> is already exist", folderToAdd))
 		}
 	}
 
@@ -51,7 +51,7 @@ func HandleAddPath(newFolderPath string) (err error) {
 	//check folder size
 	err = diskmgr.CheckFolder(folderToAdd, size, diskFileMgr.CheckLimitGB, diskFileMgr.BottomSizeGB)
 	if err != nil {
-		return err
+		return "", 0, nil, err
 	}
 
 	newFolder := folderMgr.FolderConfig{
@@ -61,21 +61,12 @@ func HandleAddPath(newFolderPath string) (err error) {
 
 	provideFolder = append(provideFolder, newFolder)
 
-	configuration.Config.SetProvideFolders(provideFolder)
-	err = configuration.Config.WriteConfig()
-	if err != nil {
-		//todo handle save err
-
-		return
-	}
-	//todo add color
-	fmt.Println("new folder added:", folderToAdd, "size:", size, "GB")
-	return nil
+	return folderToAdd, size, provideFolder, nil
 }
 
-func HandleRemovePath(pathToRemove string) (err error) {
+func HandleRemovePath(pathToRemove string) (removedPath string, provideFolder []folderMgr.FolderConfig, err error) {
 	//read exist path from config
-	provideFolder, err := configuration.Config.GetProvideFolders()
+	provideFolder, err = configuration.Config.GetProvideFolders()
 	if err == configuration.ErrProvideFolderType || err == configuration.ErrProvideFolderContent {
 		fmt.Println("the exist provide folder configuration is invalid, it will be deleted")
 	}
@@ -96,17 +87,8 @@ func HandleRemovePath(pathToRemove string) (err error) {
 	}
 
 	if !exist {
-		return errors.New(fmt.Sprintf("The path <%s> is not exist", folderToRemove))
-	} else {
-		configuration.Config.SetProvideFolders(provideFolder)
-		err = configuration.Config.WriteConfig()
-		if err != nil {
-			//todo handle save err
-
-			return
-		}
-		//todo add color
-		fmt.Println("path removed:", folderToRemove)
-		return nil
+		return "", nil, errors.New(fmt.Sprintf("The path <%s> is not exist", folderToRemove))
 	}
+
+	return folderToRemove, provideFolder, nil
 }

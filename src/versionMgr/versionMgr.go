@@ -16,6 +16,9 @@ type VersionMgr struct {
 var versionMgr *VersionMgr
 
 func Init() {
+	if versionMgr != nil {
+		return
+	}
 	versionMgr = &VersionMgr{
 		CurrentVersion: version,
 	}

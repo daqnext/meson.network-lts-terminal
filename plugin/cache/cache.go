@@ -7,6 +7,9 @@ import (
 var cache *UCache.Cache
 
 func Init() {
+	if cache != nil {
+		return
+	}
 	cache = UCache.New()
 }
 

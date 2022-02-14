@@ -22,6 +22,9 @@ type DestMgr struct {
 var destMgr *DestMgr
 
 func Init() {
+	if destMgr != nil {
+		return
+	}
 	destMgr = &DestMgr{
 		backupDest: map[string]struct{}{
 			"coldcdn.com": struct{}{}, //todo running server host

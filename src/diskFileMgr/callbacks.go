@@ -31,6 +31,3 @@ func onDownloadingFileDeleted(deletedFile []string) {
 func onFileMissing(missingFile []string) {
 
 }
-func onFileError(errorFile []string) {
-
-}

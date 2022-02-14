@@ -2,6 +2,7 @@ package scheduleJob
 
 import (
 	"github.com/daqnext/meson.network-lts-terminal/src/randomKeyMgr"
+	"github.com/daqnext/meson.network-lts-terminal/tools"
 )
 
 func heartBeat() {
@@ -45,4 +46,7 @@ func StartJobs() {
 
 	//updateRandomKey
 	randomKeyMgr.GetSingleInstance().ScheduleUpdateRandomKey()
+
+	//uploadPanic
+	tools.ScheduleUploadPanic()
 }

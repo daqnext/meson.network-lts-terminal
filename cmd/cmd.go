@@ -91,6 +91,16 @@ func ConfigCmd() *cli.App {
 							return nil
 						},
 					},
+					//validate config
+					{
+						Name:  "validate",
+						Usage: "validate config",
+						Flags: config.GetFlags(),
+						Action: func(clictx *cli.Context) error {
+							//todo validate config
+							return nil
+						},
+					},
 				},
 			},
 			{

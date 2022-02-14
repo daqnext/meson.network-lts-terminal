@@ -1,125 +1,127 @@
 package checkConfig
 
 import (
-	"errors"
 	"fmt"
-	"strconv"
-	"strings"
 
+	"github.com/daqnext/meson.network-lts-terminal/basic"
 	"github.com/daqnext/meson.network-lts-terminal/configuration"
 	"github.com/daqnext/meson.network-lts-terminal/src/destMgr"
-	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
 	"github.com/daqnext/meson.network-lts-terminal/src/versionMgr"
+	"github.com/universe-30/UUtils/path_util"
 )
 
 func PreCheckConfig() error {
-	destMgr.Init()
-	versionMgr.Init()
-
 	//search dest
+	destMgr.Init()
 	err := destMgr.GetSingleInstance().SearchAvailableDest()
 	if err != nil {
-		return err
+		basic.Logger.Fatalln(err)
 	}
 
 	//check version
+	versionMgr.Init()
 	versionMgr.GetSingleInstance().CheckUpdate()
 
 	//check token
-	CheckToken()
+	preCheckToken()
 
 	//check port
-	CheckPort()
+	preCheckPort()
 
 	//check folder
+	preCheckFolder()
 
 	return nil
-
 }
 
-func CheckToken(token string) {
-	//token, _ := configuration.Config.GetString("token", "")
-	//if err != nil {
-	//	basic.Logger.Errorln("Get token form config err:", err)
-	//}
+func preCheckToken() {
+	token, err := configuration.Config.GetString("token", "")
+	if err != nil {
+		fmt.Println("Get token form config err:", err)
+	}
+	originToken := token
+
 	for {
-		if token != "" {
-			//check token on server
-
-			//if pass
-			pass := true
-			if pass {
-				break
-			} else {
-				fmt.Println("invalid token")
-				token = ""
-			}
-		}
-
-		fmt.Println("Can not find your token. Please login https://meson.network")
-		fmt.Printf("Please input your token: ")
-		_, err := fmt.Scanln(&token)
-		if err != nil {
-			fmt.Println("read input token error:", err)
-		}
-	}
-}
-
-func checkPort(port int, location string) error {
-	_, exist := echoServer.DisablePortMap[port]
-	if exist {
-		return fmt.Errorf("port [%d] is forbidden", port)
-	}
-
-	location = strings.ToLower(location)
-	if location == "china" || location == "cn" {
-
-	}
-
-	if port < 10000 && port != 443 {
-		return errors.New("port should use 443 or greater than 10000")
-	}
-
-}
-
-func CheckPort(port int) {
-	//port, _ := configuration.Config.GetInt("port", 0)
-	//if err != nil {
-	//	return errors.New("port [int] in config error," + err.Error())
-	//}
-	for {
-		var myport string
 		for {
-			if port == 0 {
-				fmt.Printf("Please input your port. strongly recommend use 443. \nPlease use a port >10000 if you cannot use port 443(default 443): ")
-				_, err := fmt.Scanln(&myport)
-				if err != nil {
-					fmt.Println("input error:", err)
-					continue
-				}
-				if myport == "" {
-					port = 443
-					break
-				}
-				port, err = strconv.Atoi(myport)
-				if err != nil {
-					fmt.Println("input error:", err)
-					continue
-				}
+			if token != "" {
 				break
 			}
+			var inputToken string
+			fmt.Printf("Please input your token: ")
+			_, err := fmt.Scanln(&inputToken)
+			if err != nil {
+				fmt.Println("read input error:", err)
+				continue
+			}
+			token = inputToken
 		}
 
-		_, exist := echoServer.DisablePortMap[port]
-		if exist || (port < 10000 && port != 443) {
-			fmt.Printf("Can not use port [%d], please use 443 or >10000")
+		err := CheckToken(token)
+		if err != nil {
+
+			token = ""
 			continue
 		}
 		break
 	}
+
+	if originToken != token {
+		//save config
+		configuration.Config.Set("token", token)
+		err = configuration.Config.WriteConfig()
+		if err != nil {
+			//todo handle error
+		}
+	}
 }
 
-func CheckFolder() {
+func preCheckPort() {
+	port, err := configuration.Config.GetInt("port", 0)
+	if err != nil {
+		fmt.Println("Get port form config err:", err)
+	}
+	originPort := port
+
+	for {
+		for {
+			if port != 0 {
+				break
+			}
+			var inputPort int
+			fmt.Printf("Please input your port. strongly recommend use 443. \nPlease use a port >10000 if you cannot use port 443(default 443): ")
+			_, err := fmt.Scanln(&inputPort)
+			if err != nil {
+				fmt.Println("input error:", err)
+				continue
+			}
+			if inputPort == 0 {
+				port = 443
+				break
+			}
+			port = inputPort
+		}
+
+		err := CheckPort(port)
+		if err != nil {
+
+			port = 0
+			continue
+		}
+		break
+	}
+
+	if originPort != port {
+		//save config
+		configuration.Config.Set("port", port)
+		err = configuration.Config.WriteConfig()
+		if err != nil {
+			//todo handle error
+		}
+	}
+
+}
+
+func preCheckFolder() {
 	provideFolder, err := configuration.Config.GetProvideFolders()
 	if err != nil {
 		fmt.Println("provide folder config err:", err)
@@ -128,7 +130,37 @@ func CheckFolder() {
 		fmt.Println("provide folder not set, please input a folder path and size(GB) for meson file storage")
 	}
 
-	var pathStr string
-	fmt.Println("Please input the folder path for meson:")
+	for {
+		if len(provideFolder) == 0 {
 
+			var pathStr string
+			defaultPath := path_util.GetAbsPath("mesonfolder")
+			fmt.Printf("Please input the folder path for meson(default <%s>)\n", defaultPath)
+			fmt.Printf("path:")
+			_, err := fmt.Scanln(&pathStr)
+			if err != nil {
+				fmt.Println("input error:", err)
+				continue
+			}
+			if pathStr == "" {
+				pathStr = defaultPath
+			}
+
+			//var newPath string
+			//var size int
+			_, _, provideFolder, err = HandleAddPath(pathStr)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+
+			//save config
+			configuration.Config.SetProvideFolders(provideFolder)
+			err = configuration.Config.WriteConfig()
+			if err != nil {
+				//todo handle error
+			}
+			break
+		}
+	}
 }

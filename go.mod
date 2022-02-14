@@ -10,6 +10,7 @@ require (
 	github.com/daqnext/meson-msg v0.0.0-20220207071453-2589ea31aef4
 	github.com/daqnext/meson.network-lts-common v0.0.0-20220210062705-1a1543d66477
 	github.com/fatih/color v1.13.0
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/imroc/req v0.3.2
 	github.com/labstack/echo/v4 v4.6.2
@@ -44,6 +45,8 @@ require (
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -51,6 +54,7 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
@@ -97,4 +101,5 @@ replace (
 	github.com/daqnext/diskmgr => /Users/bruce/workspace/go/project/diskmgr
 	github.com/daqnext/downloadmgr => /Users/bruce/workspace/go/project/downloadmgr
 	github.com/daqnext/meson-msg => /Users/bruce/workspace/go/project/meson-msg
+	github.com/daqnext/MesonTerminalEchoServer => /Users/bruce/workspace/go/project/MesonTerminalEchoServer
 )

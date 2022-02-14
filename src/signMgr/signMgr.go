@@ -33,6 +33,9 @@ type SignMgr struct {
 var signMgr *SignMgr
 
 func Init() {
+	if signMgr != nil {
+		return
+	}
 	signMgr = &SignMgr{}
 }
 

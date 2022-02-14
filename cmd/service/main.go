@@ -8,6 +8,7 @@ import (
 	"github.com/daqnext/meson.network-lts-terminal/basic"
 	"github.com/daqnext/meson.network-lts-terminal/configuration"
 	"github.com/daqnext/meson.network-lts-terminal/plugin/daemonService"
+	"github.com/daqnext/meson.network-lts-terminal/src/checkConfig"
 	"github.com/urfave/cli/v2"
 )
 
@@ -20,13 +21,13 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
+	daemonService.Init()
 	compDeamon := daemonService.GetSingleInstance()
 
 	var status string
 	var e error
 	switch action {
 	case "install":
-		//check config
 		status, e = compDeamon.Install()
 		basic.Logger.Debugln("cmd install")
 	case "remove":
@@ -35,14 +36,16 @@ func RunServiceCmd(clictx *cli.Context) {
 		basic.Logger.Debugln("cmd remove")
 	case "start":
 		//check config
+		checkConfig.PreCheckConfig()
 		status, e = compDeamon.Start()
 		basic.Logger.Debugln("cmd start")
 	case "stop":
 		status, e = compDeamon.Stop()
 		basic.Logger.Debugln("cmd stop")
 	case "restart":
-		//check config
 		compDeamon.Stop()
+		//check config
+		checkConfig.PreCheckConfig()
 		status, e = compDeamon.Start()
 		basic.Logger.Debugln("cmd restart")
 	case "status":

@@ -14,6 +14,9 @@ const CheckLimitGB = 5 //todo set 40 in production
 const BottomSizeGB = 5
 
 func Init() error {
+	if dm != nil {
+		return nil
+	}
 
 	var err error
 	dm, err = new()
