@@ -1,7 +1,6 @@
 package default_
 
 import (
-	"log"
 	"net/http"
 	"time"
 
@@ -123,9 +122,7 @@ func StartDefault(clictx *cli.Context) {
 	//todo if in dev
 	runMode, _ := configuration.Config.GetString("run_mode", "pro")
 	if runMode == "dev" {
-		go func() {
-			log.Println(http.ListenAndServe(":18888", nil))
-		}()
+		tools.RunPprofTool("18888")
 	}
 
 	//echo server
