@@ -11,7 +11,7 @@ func init() {
 	basic.InitUnitTestLogger()
 	destMgr = &DestMgr{
 		backupDest: map[string]struct{}{
-			"coldcdn.com": struct{}{},
+			"coldcdn.com": {},
 		},
 	}
 	destMgr.genBackupDest()
@@ -24,5 +24,8 @@ func Test_printBackupDest(t *testing.T) {
 }
 
 func Test_SearchAvailableDest(t *testing.T) {
-	destMgr.SearchAvailableDest()
+	err := destMgr.SearchAvailableDest()
+	if err != nil {
+		log.Println(err)
+	}
 }

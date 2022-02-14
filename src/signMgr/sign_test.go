@@ -1,8 +1,14 @@
 package signMgr
 
-import "testing"
+import (
+	"log"
+	"testing"
+)
 
 func Test_v(t *testing.T) {
 	Init()
-	GetSingleInstance().GetAndParsePublicKey()
+	err := GetSingleInstance().GetAndParsePublicKey()
+	if err != nil {
+		log.Println(err)
+	}
 }

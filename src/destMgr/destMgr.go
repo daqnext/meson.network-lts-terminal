@@ -27,7 +27,7 @@ func Init() {
 	}
 	destMgr = &DestMgr{
 		backupDest: map[string]struct{}{
-			"coldcdn.com": struct{}{}, //todo running server host
+			"coldcdn.com": {}, //todo running server host
 		},
 	}
 	dest, _ := configuration.Config.GetString("dest", "")

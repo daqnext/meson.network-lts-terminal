@@ -15,18 +15,18 @@ import (
 
 func CheckLogLevel(newLevel string) error {
 	allLevel := map[string]struct{}{
-		"TRAC":  struct{}{},
-		"TRACE": struct{}{},
-		"DEBU":  struct{}{},
-		"DEBUG": struct{}{},
-		"INFO":  struct{}{},
-		"WARN":  struct{}{},
-		"ERRO":  struct{}{},
-		"ERROR": struct{}{},
-		"PANI":  struct{}{},
-		"PANIC": struct{}{},
-		"FATA":  struct{}{},
-		"FATAL": struct{}{},
+		"TRAC":  {},
+		"TRACE": {},
+		"DEBU":  {},
+		"DEBUG": {},
+		"INFO":  {},
+		"WARN":  {},
+		"ERRO":  {},
+		"ERROR": {},
+		"PANI":  {},
+		"PANIC": {},
+		"FATA":  {},
+		"FATAL": {},
 	}
 	level := strings.ToUpper(newLevel)
 	_, exist := allLevel[level]

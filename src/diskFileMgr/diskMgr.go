@@ -19,7 +19,7 @@ func Init() error {
 	}
 
 	var err error
-	dm, err = new()
+	dm, err = newDiskMgr()
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func GetSingleInstance() diskmgr.IDiskMgr {
 	return dm
 }
 
-func new() (diskmgr.IDiskMgr, error) {
+func newDiskMgr() (diskmgr.IDiskMgr, error) {
 
 	//read provide Info from config
 	provideFolder, err := configuration.Config.GetProvideFolders()

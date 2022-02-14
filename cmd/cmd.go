@@ -17,7 +17,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const CMD_NAME_DEFAULT = "default"
+//const CMD_NAME_DEFAULT = "default"
 const CMD_NAME_LOG = "logs"
 const CMD_NAME_SERVICE = "service"
 const CMD_NAME_CONFIG = "config"
@@ -180,30 +180,30 @@ func readDefaultConfig(isDev bool) (*configuration.VConfig, string, error) {
 
 	basic.Logger.Debugln("config file:", defaultConfigPath)
 
-	config, err := configuration.ReadConfig(defaultConfigPath)
+	vConfig, err := configuration.ReadConfig(defaultConfigPath)
 	if err != nil {
 		basic.Logger.Errorln("no pro.json under /configs folder , use --dev=true to run dev mode")
 		return nil, "", err
 	} else {
-		return config, defaultConfigPath, nil
+		return vConfig, defaultConfigPath, nil
 	}
 }
 
 func iniConfig(isDev bool) error {
 	//path_util.ExEPathPrintln()
 	////read default config
-	config, _, err := readDefaultConfig(isDev)
+	defaultConfig, _, err := readDefaultConfig(isDev)
 	if err != nil {
 		return err
 	}
-	configuration.Config = config
+	configuration.Config = defaultConfig
 	logerr := setLoggerLevel()
 	if logerr != nil {
 		return logerr
 	}
 
 	basic.Logger.Debugln("======== start of config ========")
-	configs, _ := config.GetConfigAsString()
+	configs, _ := defaultConfig.GetConfigAsString()
 	basic.Logger.Debugln(configs)
 	basic.Logger.Debugln("======== end  of  config ========")
 
