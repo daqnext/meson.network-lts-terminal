@@ -8,7 +8,7 @@ import (
 	"github.com/daqnext/diskmgr"
 	"github.com/daqnext/diskmgr/folderMgr"
 	"github.com/daqnext/meson.network-lts-terminal/configuration"
-	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/diskMgr"
 	"github.com/universe-30/UUtils/path_util"
 )
 
@@ -35,21 +35,21 @@ func HandleAddPath(newFolderPath string) (newPath string, sizeGB int, provideFol
 	var size int
 	for {
 		fmt.Println("Please input provider folder size(For example if you provide 100GB, please input 100, only support integer).")
-		fmt.Printf("%d GB disk space is the minimum. Please make sure you have enough free space:", diskFileMgr.BottomSizeGB)
+		fmt.Printf("%d GB disk space is the minimum. Please make sure you have enough free space:", diskMgr.BottomSizeGB)
 		_, err := fmt.Scanln(&size)
 		if err != nil {
 			fmt.Println("read input size error:", err)
 			continue
 		}
-		if size < diskFileMgr.BottomSizeGB {
-			fmt.Printf("minimum size is %d GB\n", diskFileMgr.BottomSizeGB)
+		if size < diskMgr.BottomSizeGB {
+			fmt.Printf("minimum size is %d GB\n", diskMgr.BottomSizeGB)
 			continue
 		}
 		break
 	}
 
 	//check folder size
-	err = diskmgr.CheckFolder(folderToAdd, size, diskFileMgr.CheckLimitGB, diskFileMgr.BottomSizeGB)
+	err = diskmgr.CheckFolder(folderToAdd, size, diskMgr.CheckLimitGB, diskMgr.BottomSizeGB)
 	if err != nil {
 		return "", 0, nil, err
 	}

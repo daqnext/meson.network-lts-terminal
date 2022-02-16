@@ -9,7 +9,7 @@ import (
 
 	meson_msg "github.com/daqnext/meson-msg"
 	"github.com/daqnext/meson.network-lts-terminal/basic"
-	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/diskMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
 	"github.com/daqnext/meson.network-lts-terminal/src/versionMgr"
 	"github.com/shirou/gopsutil/v3/cpu"
@@ -156,7 +156,7 @@ func (s *StatusMgr) GetMachineStatus() {
 	s.Status.Version = versionMgr.GetSingleInstance().CurrentVersion
 
 	//disk
-	total, used, _ := diskFileMgr.GetSingleInstance().GetSpaceInfo()
+	total, used, _ := diskMgr.GetSingleInstance().GetSpaceInfo()
 	s.Status.CdnDiskTotal = total
 	s.Status.CdnDiskUsed = used
 

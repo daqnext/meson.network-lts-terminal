@@ -22,7 +22,7 @@ After=network.target nss-lookup.target
 PIDFile=/var/run/{{.Name}}.pid
 ExecStartPre=/bin/rm -f /var/run/{{.Name}}.pid
 ExecStart={{.Path}} {{.Args}}
-Restart=always
+Restart=on-failure
 RestartSec=7
 [Install]
 WantedBy=multi-user.target

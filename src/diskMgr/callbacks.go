@@ -1,4 +1,4 @@
-package diskFileMgr
+package diskMgr
 
 import (
 	"github.com/daqnext/downloadmgr"

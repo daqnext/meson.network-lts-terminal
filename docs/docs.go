@@ -54,6 +54,100 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/checklog": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "get log file list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "0dea69026ee1c698",
+                        "name": "nameHash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"msg\": \"who    are  you\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/checklog/logfilepath": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server cmd"
+                ],
+                "summary": "get log content",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "0dea69026ee1c698",
+                        "name": "nameHash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "name": "Signature",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"msg\": \"who    are  you\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/delete/:nameHash": {
             "get": {
                 "description": "delete file on terminal disk",
@@ -284,7 +378,7 @@ const docTemplate_swagger = `{
                     },
                     {
                         "type": "string",
-                        "description": "sdfwefwfwfwfsdfwfwf",
+                        "description": "randomKey sign",
                         "name": "Signature",
                         "in": "header",
                         "required": true
@@ -292,21 +386,21 @@ const docTemplate_swagger = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"msg\": \"hello  Razeen\"}",
+                        "description": "result",
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "{\"msg\": \"who    are  you\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/echoResp.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -402,6 +496,18 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
+        "echoResp.RespBody": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "msg": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "meson_msg.SaveFileMsg": {
             "type": "object",
             "properties": {

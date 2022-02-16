@@ -13,7 +13,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/imroc/req v0.3.2
-	github.com/labstack/echo/v4 v4.6.2
+	github.com/labstack/echo/v4 v4.6.3
 	github.com/shirou/gopsutil/v3 v3.21.12
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.10.1
@@ -98,8 +98,9 @@ require (
 )
 
 replace (
+	github.com/daqnext/MesonTerminalEchoServer => /Users/bruce/workspace/go/project/MesonTerminalEchoServer
 	github.com/daqnext/diskmgr => /Users/bruce/workspace/go/project/diskmgr
 	github.com/daqnext/downloadmgr => /Users/bruce/workspace/go/project/downloadmgr
 	github.com/daqnext/meson-msg => /Users/bruce/workspace/go/project/meson-msg
-	github.com/daqnext/MesonTerminalEchoServer => /Users/bruce/workspace/go/project/MesonTerminalEchoServer
+	github.com/daqnext/meson.network-lts-common => /Users/bruce/workspace/go/project/meson.network-lts-common
 )

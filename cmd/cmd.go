@@ -28,7 +28,7 @@ func ConfigCmd() *cli.App {
 	isDev := false
 	for index, arg := range os.Args {
 		s := strings.ToLower(arg)
-		if s == "-dev=true" {
+		if s == "-dev=true" || s == "--dev=true" {
 			isDev = true
 			os.Args = append(os.Args[:index], os.Args[index+1:]...)
 			break

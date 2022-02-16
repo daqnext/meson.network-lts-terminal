@@ -10,7 +10,7 @@ import (
 	"github.com/daqnext/meson.network-lts-terminal/configuration"
 	"github.com/daqnext/meson.network-lts-terminal/plugin/cache"
 	"github.com/daqnext/meson.network-lts-terminal/src/destMgr"
-	"github.com/daqnext/meson.network-lts-terminal/src/diskFileMgr"
+	"github.com/daqnext/meson.network-lts-terminal/src/diskMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/echoServer"
 	"github.com/daqnext/meson.network-lts-terminal/src/randomKeyMgr"
 	"github.com/daqnext/meson.network-lts-terminal/src/signMgr"
@@ -39,7 +39,7 @@ func initComponent() {
 		basic.Logger.Fatalln("echoServer init error:", err)
 	}
 
-	err = diskFileMgr.Init()
+	err = diskMgr.Init()
 	if err != nil {
 		basic.Logger.Fatalln("diskFileMgr init error:", err)
 	}

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	meson_msg "github.com/daqnext/meson-msg"
+	"github.com/daqnext/meson.network-lts-common/echoResp"
 	"github.com/daqnext/meson.network-lts-terminal/basic"
 	"github.com/labstack/echo/v4"
 	"github.com/universe-30/UUtils/path_util"
@@ -17,17 +18,15 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param        SaveFileMsg  body   meson_msg.SaveFileMsg  true "save command object"
-// @Param        Signature  header  string  true  "sdfwefwfwfwfsdfwfwf"
-// @Success      200  {string}  string  "{"msg": "hello  Razeen"}"
-// @Failure      400  {string}  string  "{"msg": "who    are  you"}"
-// @Failure      401  {string}  string  "Unauthorized"
+// @Param        Signature  header  string  true  "randomKey sign"
+// @response 	 200 {object} echoResp.RespBody{data=object} "result"
 // @Router       /api/save [post]
 func saveHandler(ctx echo.Context) error {
 	var msg meson_msg.SaveFileMsg
 	if err := ctx.Bind(&msg); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return echoResp.ErrorResp(ctx, echoResp.ErrMalParams)
 	}
-	return ctx.String(200, msg.NameHash)
+	return echoResp.SuccessResp(ctx, nil)
 }
 
 // @Summary      delete file command
@@ -48,8 +47,7 @@ func deleteHandler(ctx echo.Context) error {
 	return ctx.String(200, nameHash)
 }
 
-// @Summary      delete file command
-// @Description  delete file on terminal disk
+// @Summary      get log file list
 // @Tags         server cmd
 // @Produce      json
 // @Param        nameHash  path  string  true  "0dea69026ee1c698"
@@ -57,7 +55,7 @@ func deleteHandler(ctx echo.Context) error {
 // @Success      200  {string}  string  "{"msg": "hello  Razeen"}"
 // @Failure      400  {string}  string  "{"msg": "who    are  you"}"
 // @Failure      401  {string}  string  "Unauthorized"
-// @Router       /api/delete/:nameHash [get]
+// @Router       /api/checklog [get]
 func listLogFileHandler(ctx echo.Context) error {
 	logFiles := []byte{}
 	//all logs
@@ -92,8 +90,7 @@ func listLogFileHandler(ctx echo.Context) error {
 	return ctx.Blob(http.StatusOK, "text/html; charset=utf-8", logFiles)
 }
 
-// @Summary      delete file command
-// @Description  delete file on terminal disk
+// @Summary      get log content
 // @Tags         server cmd
 // @Produce      json
 // @Param        nameHash  path  string  true  "0dea69026ee1c698"
@@ -101,7 +98,7 @@ func listLogFileHandler(ctx echo.Context) error {
 // @Success      200  {string}  string  "{"msg": "hello  Razeen"}"
 // @Failure      400  {string}  string  "{"msg": "who    are  you"}"
 // @Failure      401  {string}  string  "Unauthorized"
-// @Router       /api/delete/:nameHash [get]
+// @Router       /api/checklog/logfilepath [get]
 func checkLogHandler(ctx echo.Context) error {
 	file := ctx.Param("*")
 	return ctx.File(filepath.Join(path_util.GetAbsPath("./logs"), file))

@@ -1,4 +1,12 @@
 definitions:
+  echoResp.RespBody:
+    properties:
+      data: {}
+      msg:
+        type: string
+      status:
+        type: integer
+    type: object
   meson_msg.SaveFileMsg:
     properties:
       nameHash:
@@ -43,6 +51,68 @@ paths:
       summary: get cached file
       tags:
       - public
+  /api/checklog:
+    get:
+      parameters:
+      - description: 0dea69026ee1c698
+        in: path
+        name: nameHash
+        required: true
+        type: string
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: '{"msg": "who    are  you"}'
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: get log file list
+      tags:
+      - server cmd
+  /api/checklog/logfilepath:
+    get:
+      parameters:
+      - description: 0dea69026ee1c698
+        in: path
+        name: nameHash
+        required: true
+        type: string
+      - description: sdfwefwfwfwfsdfwfwf
+        in: header
+        name: Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg": "hello  Razeen"}'
+          schema:
+            type: string
+        "400":
+          description: '{"msg": "who    are  you"}'
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: get log content
+      tags:
+      - server cmd
   /api/delete/:nameHash:
     get:
       description: delete file on terminal disk
@@ -191,7 +261,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/meson_msg.SaveFileMsg'
-      - description: sdfwefwfwfwfsdfwfwf
+      - description: randomKey sign
         in: header
         name: Signature
         required: true
@@ -200,17 +270,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"msg": "hello  Razeen"}'
+          description: result
           schema:
-            type: string
-        "400":
-          description: '{"msg": "who    are  you"}'
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/echoResp.RespBody'
+            - properties:
+                data:
+                  type: object
+              type: object
       summary: save file command
       tags:
       - server cmd
